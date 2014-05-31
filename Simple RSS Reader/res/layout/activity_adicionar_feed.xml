@@ -1,0 +1,79 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical" xmlns:android1="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+            <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/adicionar_feed_explicacao"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/adicionar_feed_exemplo"
+            android:textSize="12sp" />
+    </LinearLayout>
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    <EditText 
+	        android:id="@+id/url_feed_adicionar_feed_activity"
+	        android:inputType="textUri"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/adicionar_feed_endereco"
+	        />
+	</LinearLayout>
+	<LinearLayout 
+	    android:id="@+id/dados_feed__adicionar_feed_activity"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:visibility="gone">
+	    <TextView 
+	        android:id="@+id/nome__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Título do Site"/>
+	    <TextView 
+	        android:id="@+id/descricao__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Descrição do Site"/>
+	    <TextView 
+	        android:id="@+id/link__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Endereço do Site"/>
+	    <TextView 
+	        android:id="@+id/idioma__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Idioma do Site"/>
+	    <TextView 
+	        android:id="@+id/categoria__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Categoria do Site"/>
+	    <Button 
+	        android:id="@+id/adicionar__adicionar_feed_activity"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Adicionar Feed"
+	        />
+	 </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

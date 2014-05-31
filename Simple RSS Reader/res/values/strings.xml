@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple RSS Reader</string>
+    <string name="action_adicionar_feed">Adicionar Feed</string>
+    <string name="action_atualizar_lista_feed">Atualizar Feeds</string>
+    <string name="action_configurar">Configurar</string>
+	<string name="action_sobre">Sobre</string>    
+	<string name="action_ajuda">Ajuda</string>
+    <string name="action_settings">Configurar</string>
+    <string name="menu_contexto_detalhes">Detalhes</string>
+    <string name="menu_contexto_abrir_no_navegador">Abrir no Navegador</string>
+    <string name="menu_contexto_atualizar_feed">Atualizar Feed</string>
+    <string name="menu_contexto_limpar">Limpar Conteúdo</string>
+    <string name="menu_contexto_excluir">Excluir</string>
+    <string name="icone_do_feed">Ícone do Feed</string>
+    <string name="nome_do_feed">Nome do Feed por Extenso</string>
+    <string name="uri_do_feed">URL do Feed por Extenso</string>
+    <string name="title_activity_adicionar_feed">Adicionar Feed</string>
+    <string name="adicionar_feed_explicacao">Insira o endereço do Feed RSS do site ou blog de sua preferência no campo abaixo.</string>
+    <string name="adicionar_feed_exemplo">Exemplo: www.seublog.com/rss</string>
+    <string name="adicionar_feed_endereco">Endereço do Feed</string>
+    <string name="title_activity_exibir_posts">Exibir Posts Activity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_exibir_post">Exibir Post Activity</string>
+
+</resources>

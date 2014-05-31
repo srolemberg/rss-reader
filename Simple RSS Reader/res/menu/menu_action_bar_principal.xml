@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_adicionar_feed"
+        android:icon="@android:drawable/ic_input_add"
+        android:showAsAction="always"
+        android:title="@string/action_adicionar_feed"/>
+    <item
+        android:id="@+id/action_atualizar_lista_feed"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_atualizar_lista_feed"/>
+    <item
+        android:id="@+id/action_configurar"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_configurar"/>
+    <item
+        android:id="@+id/action_ajuda"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_ajuda"/>
+    <item
+        android:id="@+id/action_sobre"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_sobre"/>
+    
+</menu>

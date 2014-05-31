@@ -1,0 +1,24 @@
+Simple RSS Reader Notes
+
+-Não é possivel ler o feed em partes. O Conteúdo fornecidodo em um RSS é de responsabilidade e interesse do site que o fornece. Logo na primeira sincronização de um Feed, o conteúdo será baixado por inteiro dependendo do que foi especificado na fonte.
+Porém será necessário deixar que o usuário escolha quantos registros serão armazenados localmente.
+
+-Alguns feeds tem um comportamento estranho e podem quebrar no meio da leitura. Assim como, o mesmo feed pode simplesmente funcionar do nada. Nesse caso o site que o fornece talvez não esteja seguindo algum padrão de RSS conhecido, ou simplemente ele está mal formatado. Não há muito o que fazer no lado do software.
+
+-Alguns sites podem fornecer seu feed rss de maneiras diferentes.
+Por padrão, alguns blogs, por exemplo fornecem o XML por meio de um link comum como http://meusite.xxx/rss e ainda podem ou não oferecer em mais de um formato como http://meusite.xxx/feed. Ambos apontam para um arquivo de RSS, porém nem todos os stes são obrigados a fazer essaimplementação. Cabe ao usuário informar o link correto para o programa.
+
+-alguns feeds podem ter apenas o DESCRIPTION e não o CONTENT.
+Description é parte do conteúdo de um CONTENT com um link parao content a ser visualizado em um navegador.
+
+Tenho que tratar isso de uma ou duas formas
+
+primeiro parar exibir um description quando não houver content e futuramente forçar a exibição do content.
+
+Algumas vezes o CONTENT nem mesmo é fornecido no XML sendo null seu resultado.
+
+estudar o rss da nintendo jp que nao possui conteudo e nem descricao e o do polygon que não possui descrição apenas conteudo e o do teerra que só possui descricao (!)
+
+ver o conteudo da nintendo america que está coma codificação dos post diferente de utf8
+
+ver como trocar o modo dos isos no android nos componentes
