@@ -2,6 +2,7 @@ package br.com.samirrolemberg.simplerssreader.model;
 
 
 
+
 public class Imagem {
 
 	private final long idImagem;
@@ -10,6 +11,7 @@ public class Imagem {
 	private final String titulo;
 	private final String url;
 	private final Feed feed;
+	private final int acesso;
 
 	public static class Builder{
 		private long idImagem;
@@ -18,6 +20,7 @@ public class Imagem {
 		private String titulo;
 		private String url;
 		private Feed feed;
+		private int acesso;
 
 		public Imagem build(){
 			return new Imagem(this);
@@ -28,6 +31,7 @@ public class Imagem {
 		public Builder titulo(String titulo){this.titulo = titulo; return this;}
 		public Builder url(String url){this.url = url; return this;}
 		public Builder feed(Feed feed){this.feed = feed; return this;}
+		public Builder acesso(int acesso){this.acesso = acesso; return this;}
 
 	}
 	private Imagem(Builder builder){
@@ -38,6 +42,7 @@ public class Imagem {
 		titulo = builder.titulo;
 		url = builder.url;
 		feed = builder.feed;
+		acesso = builder.acesso;
 	}
 	public long getIdImagem() {
 		return idImagem;
@@ -57,6 +62,9 @@ public class Imagem {
 	public Feed getFeed() {
 		return feed;
 	}
+	public int getAcesso() {
+		return acesso;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder2 = new StringBuilder();
@@ -72,8 +80,9 @@ public class Imagem {
 		builder2.append(url);
 		builder2.append(", feed=");
 		builder2.append(feed);
+		builder2.append(", acesso=");
+		builder2.append(acesso);
 		builder2.append("]");
 		return builder2.toString();
 	}
-	
 }

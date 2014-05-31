@@ -1,6 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
 
+
 public class Conteudo {
 
 	private final long idConteudo;
@@ -8,6 +9,7 @@ public class Conteudo {
 	private final String tipo;
 	private final String valor;
 	private final Post post;
+	private final int acesso;
 
 	public static class Builder{
 		private long idConteudo;
@@ -15,6 +17,7 @@ public class Conteudo {
 		private String tipo;
 		private String valor;
 		private Post post;
+		private int acesso;
 		
 		public Conteudo build(){
 			return new Conteudo(this);
@@ -25,6 +28,7 @@ public class Conteudo {
 		public Builder tipo(String tipo){this.tipo = tipo; return this;}
 		public Builder valor(String valor){this.valor = valor; return this;}
 		public Builder post(Post post){this.post = post; return this;}
+		public Builder acesso(int acesso){this.acesso = acesso; return this;}
 
 	}
 	private Conteudo(Builder builder){
@@ -34,6 +38,7 @@ public class Conteudo {
 		tipo = builder.tipo;
 		valor = builder.valor;
 		post = builder.post;
+		acesso = builder.acesso;
 	}
 	public long getIdConteudo() {
 		return idConteudo;
@@ -50,6 +55,9 @@ public class Conteudo {
 	public Post getPost() {
 		return post;
 	}
+	public int getAcesso() {
+		return acesso;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder2 = new StringBuilder();
@@ -63,6 +71,8 @@ public class Conteudo {
 		builder2.append(valor);
 		builder2.append(", post=");
 		builder2.append(post);
+		builder2.append(", acesso=");
+		builder2.append(acesso);
 		builder2.append("]");
 		return builder2.toString();
 	}

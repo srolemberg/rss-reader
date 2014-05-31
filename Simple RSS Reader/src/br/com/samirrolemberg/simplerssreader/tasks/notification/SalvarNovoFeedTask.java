@@ -1,5 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.tasks.notification;
 
+import java.util.Random;
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,7 +11,6 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
-import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dao.DAOImagem;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
@@ -22,11 +23,14 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 	private NotificationCompat.Builder mBuilder = null;
 	private int id = 0;
 	private Feed feed = null;
+	private int estimativa = 0;
+	private long idFeed = 0;
 	
-	public SalvarNovoFeedTask(Context context, Feed feed){
+	public SalvarNovoFeedTask(Context context, Feed feed, long idFeed){
 		this.context = context;
-		this.id = this.id+1;//colocar parametero
+		this.id = new Random().nextInt(999);//colocar parametero
 		this.feed = feed;
+		this.idFeed = idFeed;
 	}
 
 	@Override
@@ -34,16 +38,16 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		super.onPreExecute();
 		this.mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mBuilder = new NotificationCompat.Builder(context)
-		.setContentTitle("Adicionando Feed")
-		.setContentText("Verificando novas entradas e duplicatas.")
+		.setContentTitle("Adicionando "+feed.getTitulo())
+		.setContentText("Adicionando novos registros.")
 		.setSmallIcon(android.R.drawable.arrow_down_float);
-
+		estimativa = estimativaDosFor();
 	}
 	@Override
 	protected Feed doInBackground(String... params) {
 		addFeed();
 		// When the loop is finished, updates the notification
-        mBuilder.setContentText("Download complete")
+        mBuilder.setContentText("Novo Feed adicionado.")
         // Removes the progress bar
                 .setProgress(0,0,false);
         mNotifyManager.notify(id, mBuilder.build());
@@ -76,9 +80,9 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		return i;
 	}
 	private void addFeed(){
-		DAOFeed daoFeed = new DAOFeed(getContext());
-		long idFeed = daoFeed.inserir(feed);
-		int estimativa = estimativaDosFor();
+		//DAOFeed daoFeed = new DAOFeed(getContext());//adicionou na outra activity
+		//long idFeed = daoFeed.inserir(feed);
+		//int estimativa = estimativaDosFor();
 		int atual = 0;
 		if (idFeed!=-1) {
 			DAOPost daoPost = new DAOPost(getContext());
@@ -157,7 +161,8 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 			daoImagem.close();
 			daoPost.close();
 		}
-		daoFeed.close();
+		//TODO: COLOCAR UMA MUDANÇA DE FLAG NO FEED PARA SER ACESSÍVEL.
+		//daoFeed.close();
 		//TODO: JOGAR O PROCESSO DE ADIÇÃO EM BACKGROUND NUMA NOTIFICAÇÃO.
 	}
 }

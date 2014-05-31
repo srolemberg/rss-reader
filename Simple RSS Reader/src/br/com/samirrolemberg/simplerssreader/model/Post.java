@@ -20,6 +20,7 @@ public class Post implements Serializable{
 	private final List<Conteudo> conteudos;
 	private final List<Anexo> anexos;
 	private final Feed feed;
+	private final int acesso;
 	
 	public static class Builder{
 		private long idPost;
@@ -34,6 +35,7 @@ public class Post implements Serializable{
 		private List<Conteudo> conteudos;
 		private List<Anexo> anexos;
 		private Feed feed;
+		private int acesso;
 
 		//apenas se algum do parametros necessitar ser inicializado no construtror
 		//tornar publico e colocar seus parametros em Builder
@@ -53,6 +55,7 @@ public class Post implements Serializable{
 		public Builder conteudos(List<Conteudo> conteudos){this.conteudos = conteudos; return this;}
 		public Builder anexos(List<Anexo> anexos){this.anexos = anexos; return this;}
 		public Builder feed(Feed feed){this.feed = feed; return this;}
+		public Builder acesso(int acesso){this.acesso = acesso; return this;}
 
 		public Post build(){
 			return new Post(this);
@@ -74,6 +77,11 @@ public class Post implements Serializable{
 		conteudos = builder.conteudos;
 		anexos = builder.anexos;
 		feed = builder.feed;
+		acesso = builder.acesso;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public long getIdPost() {
@@ -124,6 +132,10 @@ public class Post implements Serializable{
 		return feed;
 	}
 
+	public int getAcesso() {
+		return acesso;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder2 = new StringBuilder();
@@ -151,6 +163,8 @@ public class Post implements Serializable{
 		builder2.append(anexos);
 		builder2.append(", feed=");
 		builder2.append(feed);
+		builder2.append(", acesso=");
+		builder2.append(acesso);
 		builder2.append("]");
 		return builder2.toString();
 	}

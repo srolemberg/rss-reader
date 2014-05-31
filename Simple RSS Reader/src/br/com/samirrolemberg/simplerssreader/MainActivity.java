@@ -1,7 +1,5 @@
 package br.com.samirrolemberg.simplerssreader;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,11 +18,9 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
-import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
-import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
-import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
 
 public class MainActivity extends Activity {
 
@@ -113,20 +109,17 @@ public class MainActivity extends Activity {
 				public void onClick(DialogInterface dialog, int which) {
 					Toast.makeText(MainActivity.this, "YES!!", Toast.LENGTH_SHORT).show();		
 					//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM FEED
+					//excluir(MainActivity.this, feedAux);
+					
+					//remove o feed do banco apenas
 					DAOFeed daoFeed = new DAOFeed(MainActivity.this);
 					daoFeed.remover(feedAux);
 					daoFeed.close();
-					DAOPost daoPost = new DAOPost(MainActivity.this);
-					List<Post> posts = daoPost.listarTudo(feedAux);
-					DAODescricao daoDescricao = new DAODescricao(MainActivity.this);
-					for (Post post : posts) {
-						daoPost.remover(post);
-						daoDescricao.remover(post);
-					}
-					daoPost.close();
-					daoDescricao.close();
-					daoFeed.close();
-					carregar();
+					carregar();//atualiza para o usuário
+					//remove o restante do feed em background
+					ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
+					String[] params = {""};
+					task.execute(params);
 				}
 			})
 			.setNegativeButton("Não", null)
@@ -168,4 +161,36 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+//	private void excluir(Context context, Feed feed){
+//		DAOFeed daoFeed = new DAOFeed(context);
+//		DAOPost daoPost = new DAOPost(context);
+//		DAODescricao daoDescricao = new DAODescricao(context);
+//		DAOImagem daoImagem = new DAOImagem(context);
+//		DAOAnexo daoAnexo = new DAOAnexo(context);
+//		DAOCategoria daoCategoria = new DAOCategoria(context);
+//		DAOConteudo daoConteudo = new DAOConteudo(context);
+//		
+//		List<Post> posts = daoPost.listarTudo(feed);
+//		
+//		daoFeed.remover(feed);
+//		daoCategoria.remover(feed);
+//		daoImagem.remover(feed);
+//		for (Post post : posts) {
+//			daoPost.remover(post);
+//			daoDescricao.remover(post);
+//			daoAnexo.remover(post);
+//			daoCategoria.remover(post);
+//			daoConteudo.remover(post);
+//		}
+//		
+//		daoFeed.close();
+//		daoPost.close();
+//		daoDescricao.close();
+//		daoImagem.close();
+//		daoAnexo.close();
+//		daoCategoria.close();
+//		daoConteudo.close();
+//		
+//	}
 }

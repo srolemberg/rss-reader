@@ -1,6 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
 
+
 public class Descricao {
 
 	private final long idDescricao;
@@ -8,14 +9,16 @@ public class Descricao {
 	private final String tipo;
 	private final String valor;
 	private final Post post;
-	
+	private final int acesso;
+
 	public static class Builder{
 		private long idDescricao;
 		private String modo;
 		private String tipo;
 		private String valor;
 		private Post post;
-		
+		private int acesso;
+
 		public Descricao build(){
 			return new Descricao(this);
 		}
@@ -24,6 +27,7 @@ public class Descricao {
 		public Builder tipo(String tipo){this.tipo = tipo; return this;}
 		public Builder valor(String valor){this.valor = valor; return this;}
 		public Builder post(Post post){this.post = post; return this;}
+		public Builder acesso(int acesso){this.acesso = acesso; return this;}
 
 	}
 	private Descricao(Builder builder){
@@ -33,6 +37,7 @@ public class Descricao {
 		tipo = builder.tipo;
 		valor = builder.valor;
 		post = builder.post;
+		acesso = builder.acesso;
 	}
 	public long getIdDescricao() {
 		return idDescricao;
@@ -49,6 +54,9 @@ public class Descricao {
 	public Post getPost() {
 		return post;
 	}
+	public int getAcesso() {
+		return acesso;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder2 = new StringBuilder();
@@ -62,8 +70,9 @@ public class Descricao {
 		builder2.append(valor);
 		builder2.append(", post=");
 		builder2.append(post);
+		builder2.append(", acesso=");
+		builder2.append(acesso);
 		builder2.append("]");
 		return builder2.toString();
 	}
-	
 }

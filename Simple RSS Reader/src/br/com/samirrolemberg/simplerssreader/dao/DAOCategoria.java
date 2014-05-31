@@ -129,13 +129,13 @@ public class DAOCategoria extends Connection {
 		return categoria;
 	}
 
-	public void remover(Post post){
+	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return getWritableDatabase().delete(TABLE, "idPost=?", args);
 	}
-	public void remover(Feed feed){
+	public int remover(Feed feed){
 		String[] args = {feed.getIdFeed()+""};
-		getWritableDatabase().delete(TABLE, "idFeed=?", args);
+		return getWritableDatabase().delete(TABLE, "idFeed=?", args);
 	}
 
 }

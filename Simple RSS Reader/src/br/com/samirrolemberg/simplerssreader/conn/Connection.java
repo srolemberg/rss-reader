@@ -47,11 +47,12 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("uri VARCHAR(255) NULL,       ");
 			ddl.append("data_cadastro DATETIME NULL,       ");
 			ddl.append("data_sincronizacao DATETIME NULL,");
-			ddl.append("rss VARCHAR(255) NULL       ");
+			ddl.append("rss VARCHAR(255) NULL,       ");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			return ddl.toString();
 	}
-	
+	   //acesso TINYINT(1) DEFAULT 0
 	public String table_002(){
 		StringBuffer ddl = new StringBuffer();			
 		ddl.append("create table imagem (");
@@ -60,7 +61,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("link VARCHAR(255) NULL,       ");
 			ddl.append("titulo VARCHAR(255) NULL,       ");
 			ddl.append("url VARCHAR(255) NULL,");
-			ddl.append("idFeed INTEGER NULL");
+			ddl.append("idFeed INTEGER NULL,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			return ddl.toString();
 	}
@@ -74,7 +76,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("titulo VARCHAR(255) NULL,       ");
 			ddl.append("data_atualizacao DATETIME NULL,       ");
 			ddl.append("link_URI VARCHAR(255) NULL,       ");
-			ddl.append("idFeed INTEGER NULL");
+			ddl.append("idFeed INTEGER NULL,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			return ddl.toString();
 	}
@@ -85,7 +88,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("nome VARCHAR(255) NULL,       ");
 			ddl.append("url VARCHAR(255) NULL,       ");
 			ddl.append("idFeed INTEGER NULL,       ");
-			ddl.append("idPost INTEGER NULL");
+			ddl.append("idPost INTEGER NULL,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			return ddl.toString();
 	}
@@ -96,7 +100,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("modo VARCHAR(255) NULL,       ");
 			ddl.append("tipo VARCHAR(255) NULL,       ");
 			ddl.append("valor TEXT NULL,       ");
-			ddl.append("idPost INTEGER NULL");
+			ddl.append("idPost INTEGER NULL,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			return ddl.toString();
 	}
@@ -107,7 +112,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("modo VARCHAR(255) NULL,");
 			ddl.append("tipo VARCHAR(255) NULL,");
 			ddl.append("valor TEXT NULL,         ");
-			ddl.append("idPost INTEGER NULL");
+			ddl.append("idPost INTEGER NULL,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");		
 			return ddl.toString();
 	}
@@ -118,7 +124,8 @@ public class Connection extends SQLiteOpenHelper{
 			ddl.append("tamanho BIGINT NULL,       ");
 			ddl.append("tipo VARCHAR(255) NULL,       ");
 			ddl.append("url VARCHAR(255) NULL,");
-			ddl.append("idPost INTEGER");
+			ddl.append("idPost INTEGER,");
+			ddl.append("acesso TINYINT(1) DEFAULT 0 ");
 			ddl.append(");");
 			
 		return ddl.toString();

@@ -1,6 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
 
+
 public class Categoria {
 
 	private final long idCategoria;
@@ -8,6 +9,7 @@ public class Categoria {
 	private final String url;
 	private final Feed feed;
 	private final Post post;
+	private final int acesso;
 	
 	public static class Builder{
 		
@@ -16,6 +18,7 @@ public class Categoria {
 		private String url;
 		private Feed feed;
 		private Post post;
+		private int acesso;
 		
 		public Categoria build(){
 			return new Categoria(this);
@@ -26,6 +29,7 @@ public class Categoria {
 		public Builder url(String url){this.url = url; return this;}
 		public Builder feed(Feed feed){this.feed = feed; return this;}
 		public Builder post(Post post){this.post = post; return this;}
+		public Builder acesso(int acesso){this.acesso = acesso; return this;}
 
 	}
 	
@@ -36,6 +40,7 @@ public class Categoria {
 		url = builder.url;
 		feed = builder.feed;
 		post = builder.post;
+		acesso = builder.acesso;
 	}
 
 	public long getIdCategoria() {
@@ -58,6 +63,10 @@ public class Categoria {
 		return post;
 	}
 
+	public int getAcesso() {
+		return acesso;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder2 = new StringBuilder();
@@ -71,8 +80,10 @@ public class Categoria {
 		builder2.append(feed);
 		builder2.append(", post=");
 		builder2.append(post);
+		builder2.append(", acesso=");
+		builder2.append(acesso);
 		builder2.append("]");
 		return builder2.toString();
 	}
-	
+
 }

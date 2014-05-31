@@ -78,9 +78,9 @@ public class DAOAnexo extends Connection {
 		return anexo;
 	}
 
-	public void remover(Post post){
+	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return getWritableDatabase().delete(TABLE, "idPost=?", args);
 	}
 
 }

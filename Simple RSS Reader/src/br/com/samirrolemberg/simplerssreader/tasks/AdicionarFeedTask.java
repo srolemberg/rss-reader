@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.AdicionarFeedActivity;
 import br.com.samirrolemberg.simplerssreader.R;
+import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.model.ExceptionMessage;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.SimpleFeed;
@@ -111,7 +112,11 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 			adicionar.setOnClickListener(new OnClickListener() {				
 				@Override
 				public void onClick(View v) {
-					SalvarNovoFeedTask task = new SalvarNovoFeedTask(getContext(), result);
+					DAOFeed daoFeed = new DAOFeed(getContext());//adiciona os dados do feed vazio
+					long idFeed = daoFeed.inserir(result);//retorna o id do novo feed
+					daoFeed.close();
+					//repassa o id do novo feed vazio que sera exibido na outra tela! não poderá acessar até que a task mude a flag
+					SalvarNovoFeedTask task = new SalvarNovoFeedTask(getContext(), result, idFeed);
 					String[] params = {""};
 					task.execute(params);
 					//NavUtils.navigateUpFromSameTask(activity);
