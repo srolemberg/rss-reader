@@ -21,6 +21,7 @@ import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
+import br.com.samirrolemberg.simplerssreader.tasks.notification.LimparConteudoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class MainActivity extends Activity {
@@ -108,12 +109,29 @@ public class MainActivity extends Activity {
 			break;
 		case R.id.menu_contexto_limpar_conteudo:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			new AlertDialog.Builder(MainActivity.this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(feedAux.getTitulo())
+			.setMessage("Você removerá todo o conteúdo adicionado para este Feed anteriormente. Deseja continuar?")
+			.setPositiveButton("Sim", new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Toast.makeText(MainActivity.this, "YES!!", Toast.LENGTH_SHORT).show();		
+					
+					LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
+					String[] params = {""};
+					task.execute(params);
+
+				}
+			})
+			.setNegativeButton("Não", null)
+			.show();
 			break;
 		case R.id.menu_contexto_excluir:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle("Remover")
+			.setTitle(feedAux.getTitulo())
 			.setMessage("Deseja remover o FEED selecionado?")
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override

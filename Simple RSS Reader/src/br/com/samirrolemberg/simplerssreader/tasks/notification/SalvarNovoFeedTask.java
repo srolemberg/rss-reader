@@ -88,7 +88,7 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		Feed idf= new Feed.Builder().idFeed(idFeed).build();
 		daoFeed.atualizaAcesso(idf, 1);
 		
-		atual+=	daoCategoria.atualizaAcesso(feed, 1);
+		atual+=	daoCategoria.atualizaAcesso(idf, 1);
 		mBuilder.setProgress(estimativa, atual, false);
         mNotifyManager.notify(id, mBuilder.build());
 
