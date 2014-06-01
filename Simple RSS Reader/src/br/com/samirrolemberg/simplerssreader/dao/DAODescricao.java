@@ -30,6 +30,13 @@ public class DAODescricao extends Connection {
 		return id;
 		
 	}
+	public int atualizaAcesso(Post post, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {post.getIdPost()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+	}
 
 	public long size(Post post){
 		long resultado = 0;

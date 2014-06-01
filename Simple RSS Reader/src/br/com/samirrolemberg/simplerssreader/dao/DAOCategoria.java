@@ -40,6 +40,20 @@ public class DAOCategoria extends Connection {
 		return id;
 		
 	}
+	public int atualizaAcesso(Feed feed, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {feed.getIdFeed()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idFeed = ?", args);
+	}
+	public int atualizaAcesso(Post post, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {post.getIdPost()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+	}
 
 	public List<Categoria> listarTudo(Post post){
 		List<Categoria> categorias = new ArrayList<Categoria>();

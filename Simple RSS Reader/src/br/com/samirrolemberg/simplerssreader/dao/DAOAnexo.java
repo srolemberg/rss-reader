@@ -30,6 +30,13 @@ public class DAOAnexo extends Connection {
 		return id;
 		
 	}
+	public int atualizaAcesso(Post post, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {post.getIdPost()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+	}
 
 	public List<Anexo> listarTudo(Post post){
 		List<Anexo> anexos = new ArrayList<Anexo>();

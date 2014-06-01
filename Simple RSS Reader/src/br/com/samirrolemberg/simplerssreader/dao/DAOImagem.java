@@ -31,6 +31,13 @@ public class DAOImagem extends Connection {
 		return id;
 		
 	}
+	public int atualizaAcesso(Feed feed, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {feed.getIdFeed()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idFeed = ?", args);
+	}
 
 	public List<Imagem> listarTudo(Feed feed){
 		List<Imagem> imagens = new ArrayList<Imagem>();

@@ -34,6 +34,13 @@ public class DAOPost extends Connection {
 		return id;
 		
 	}
+	public int atualizaAcesso(Post post, int acesso){
+		ContentValues values = new ContentValues();
+		values.put("acesso", acesso);
+		String[] args = {post.getIdPost()+""};
+
+		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+	}
 
 	public List<Post> listarTudo(Feed feed){
 		List<Post> posts = new ArrayList<Post>();

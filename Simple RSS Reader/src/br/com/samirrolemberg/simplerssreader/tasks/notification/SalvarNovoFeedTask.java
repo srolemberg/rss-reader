@@ -1,5 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.tasks.notification;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import android.app.NotificationManager;
@@ -7,14 +9,17 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
+import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dao.DAOImagem;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 
@@ -25,7 +30,18 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 	private Feed feed = null;
 	private int estimativa = 0;
 	private long idFeed = 0;
-	
+	private List<Long> idsPost = null;
+	private int atual = 0;
+
+	private DAOFeed daoFeed = null;
+	private DAOPost daoPost = null;
+	private DAODescricao daoDescricao = null;
+	private DAOConteudo daoConteudo = null;
+	private DAOAnexo daoAnexo = null;
+	private DAOCategoria daoCategoria = null;
+	private DAOImagem daoImagem = null;
+
+	//TODO: POR ALGUM MOTIVO, DEPOIS DA ATUALIZAÇÃO DO ACESSO, UM DOS VALORES DO PROGRESSO ESTÁ MENOR.
 	public SalvarNovoFeedTask(Context context, Feed feed, long idFeed){
 		this.context = context;
 		this.id = new Random().nextInt(999);//colocar parametero
@@ -41,7 +57,8 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		.setContentTitle("Adicionando "+feed.getTitulo())
 		.setContentText("Adicionando novos registros.")
 		.setSmallIcon(android.R.drawable.arrow_down_float);
-		estimativa = estimativaDosFor();
+		estimativa = estimativaDosFor()*2;
+		Executando.ADICIONAR_FEED.put(idFeed+feed.getRss(), 1);
 	}
 	@Override
 	protected Feed doInBackground(String... params) {
@@ -54,10 +71,51 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 
 		return null;
 	}
+	@Override
+	protected void onPostExecute(Feed result) {
+		super.onPostExecute(result);
+				
+		Executando.ADICIONAR_FEED.remove(idFeed+feed.getRss());
+		Log.w("OUTPUT-TEST", estimativa+" estimativa");
+		Log.w("OUTPUT-TEST", atual+" atual");
+		Toast.makeText(getContext(), feed.getTitulo()+" foi adicionado com sucesso.", Toast.LENGTH_SHORT).show();
+	}
+
 	protected Context getContext(){
 		return this.context;
 	}
+	private void atualiza(){
+		Feed idf= new Feed.Builder().idFeed(idFeed).build();
+		daoFeed.atualizaAcesso(idf, 1);
+		
+		atual+=	daoCategoria.atualizaAcesso(feed, 1);
+		mBuilder.setProgress(estimativa, atual, false);
+        mNotifyManager.notify(id, mBuilder.build());
 
+		daoImagem.atualizaAcesso(idf, 1);
+		for (Long idPost : idsPost) {
+			Post post = new Post.Builder().idPost(idPost).build();
+			
+			atual+=	daoPost.atualizaAcesso(post, 1);
+
+	        mBuilder.setProgress(estimativa, atual, false);
+	        mNotifyManager.notify(id, mBuilder.build());
+
+			atual+=	daoCategoria.atualizaAcesso(post, 1);
+	        mBuilder.setProgress(estimativa, atual, false);
+	        mNotifyManager.notify(id, mBuilder.build());
+			
+			daoDescricao.atualizaAcesso(post, 1);
+			
+			atual+=	daoConteudo.atualizaAcesso(post, 1);
+	        mBuilder.setProgress(estimativa, atual, false);
+	        mNotifyManager.notify(id, mBuilder.build());
+			
+			atual+=	daoAnexo.atualizaAcesso(post, 1);
+	        mBuilder.setProgress(estimativa, atual, false);
+	        mNotifyManager.notify(id, mBuilder.build());
+		}
+	}
 	private int estimativaDosFor(){
 		int i = 0;//pq pode adicionar apenas o feed sem nada (!)
 		if (feed.getCategorias()!=null) {
@@ -80,17 +138,16 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		return i;
 	}
 	private void addFeed(){
-		//DAOFeed daoFeed = new DAOFeed(getContext());//adicionou na outra activity
+		daoFeed = new DAOFeed(getContext());
 		//long idFeed = daoFeed.inserir(feed);
 		//int estimativa = estimativaDosFor();
-		int atual = 0;
 		if (idFeed!=-1) {
-			DAOPost daoPost = new DAOPost(getContext());
-			DAODescricao daoDescricao = new DAODescricao(getContext());
-			DAOConteudo daoConteudo = new DAOConteudo(getContext());
-			DAOAnexo daoAnexo = new DAOAnexo(getContext());
-			DAOCategoria daoCategoria = new DAOCategoria(getContext());
-			DAOImagem daoImagem = new DAOImagem(getContext());
+			daoPost = new DAOPost(getContext());
+			daoDescricao = new DAODescricao(getContext());
+			daoConteudo = new DAOConteudo(getContext());
+			daoAnexo = new DAOAnexo(getContext());
+			daoCategoria = new DAOCategoria(getContext());
+			daoImagem = new DAOImagem(getContext());
 			
 			if (feed.getCategorias()!=null) {
 				//pega a categoria do feed
@@ -108,12 +165,14 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 				daoImagem.inserir(feed.getImagem(), idFeed);
 			}
 			if (feed.getPosts()!=null) {
+				idsPost = new ArrayList<Long>();
 				for (int i = 0; i < feed.getPosts().size(); i++) {
 	                atual ++;
 	                mBuilder.setProgress(estimativa, atual, false);
 	                mNotifyManager.notify(id, mBuilder.build());
 	                
 					long idPost = daoPost.inserir(feed.getPosts().get(i), idFeed);
+					idsPost.add(idPost);
 					//pega as categorias dos posts
 					if (feed.getPosts().get(i).getCategorias()!=null) {
 						//pega a categoria do feed
@@ -152,14 +211,14 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 
 				}
 			}
-			Log.w("OUTPUT-TEST", estimativa+" estimativa");
-			Log.w("OUTPUT-TEST", atual+" atual");
+			atualiza();//atualiza flag de acesso
 			daoAnexo.close();
 			daoCategoria.close();
 			daoConteudo.close();
 			daoDescricao.close();
 			daoImagem.close();
 			daoPost.close();
+			daoFeed.close();
 		}
 		//TODO: COLOCAR UMA MUDANÇA DE FLAG NO FEED PARA SER ACESSÍVEL.
 		//daoFeed.close();

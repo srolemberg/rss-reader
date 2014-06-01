@@ -21,6 +21,7 @@ import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
+import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class MainActivity extends Activity {
 
@@ -54,7 +55,14 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
 				feedAux = (Feed) adapter.getItemAtPosition(position);
-				return false;
+				if (Executando.ADICIONAR_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+					//se contém ainda está executando a adição dos feeds
+					Toast.makeText(MainActivity.this, "Este feed ainda não está pronto. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();					
+					return true;
+				}else{//retorna falso se está apto para exibir o menu
+					return false;					
+				}
+
 			}
 		});
 		
@@ -62,11 +70,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 				feedAux = (Feed) adapter.getItemAtPosition(position);
-				
-				Intent intent = new Intent(MainActivity.this, ListarPostsActivity.class);
-				intent.putExtra("Feed", feedAux);
-				startActivity(intent);
-
+				if (Executando.ADICIONAR_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+					//se contém ainda está executando a adição dos feeds
+					Toast.makeText(MainActivity.this, "Este feed ainda não está pronto. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();					
+				}else{
+					Intent intent = new Intent(MainActivity.this, ListarPostsActivity.class);
+					intent.putExtra("Feed", feedAux);
+					startActivity(intent);					
+				}
 			}
 		});
 		
