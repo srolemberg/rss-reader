@@ -69,6 +69,24 @@ public class DAOPost extends Connection {
 		return posts;
 	}
 
+	public long size(Feed feed){
+		long resultado = 0;
+		try {
+			String[] args = {feed.getIdFeed()+""};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(idPost) total from "+TABLE+" where idFeed = ?");
+			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				resultado = cursor.getLong(cursor.getColumnIndex("total"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+		
+		return resultado;
+	}
+
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
 		return getWritableDatabase().delete(TABLE, "idPost=?", args);

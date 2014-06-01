@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,6 +107,14 @@ public class MainActivity extends Activity {
 			break;
 		case R.id.menu_contexto_detalhes:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			LayoutInflater inflater = this.getLayoutInflater();
+			View view = (new DetalhesFeedDialog(MainActivity.this, inflater.inflate(R.layout.dialog_detalhes_feed, null), feedAux)).create();
+			new AlertDialog.Builder(MainActivity.this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Detalhes do Feed")
+			.setView(view)
+			.setPositiveButton("Fechar", null)
+			.show();
 			break;
 		case R.id.menu_contexto_limpar_conteudo:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
