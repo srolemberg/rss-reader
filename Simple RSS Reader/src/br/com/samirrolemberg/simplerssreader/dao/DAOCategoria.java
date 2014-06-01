@@ -142,6 +142,40 @@ public class DAOCategoria extends Connection {
 		}
 		return categoria;
 	}
+	public long size(Feed feed){
+		long resultado = 0;
+		try {
+			String[] args = {feed.getIdFeed()+""};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(idCategoria) total from "+TABLE+" where idFeed = ?");
+			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				resultado = cursor.getLong(cursor.getColumnIndex("total"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+		
+		return resultado;
+	}
+	public long size(Post post){
+		long resultado = 0;
+		try {
+			String[] args = {post.getIdPost()+""};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(idCategoria) total from "+TABLE+" where idPost = ?");
+			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				resultado = cursor.getLong(cursor.getColumnIndex("total"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+		
+		return resultado;
+	}
 
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};

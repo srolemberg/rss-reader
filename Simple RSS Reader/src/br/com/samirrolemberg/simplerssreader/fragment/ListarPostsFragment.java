@@ -26,6 +26,7 @@ import br.com.samirrolemberg.simplerssreader.adapter.ListarPostsFragmentAdapter;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPostDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
@@ -134,7 +135,16 @@ public class ListarPostsFragment extends Fragment{
 			startActivity(intent);
 			break;
 		case R.id.menu_contexto_detalhes:
+			//Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			View detalhe = (new DetalhesPostDialog(getActivity(), inflater.inflate(R.layout.dialog_detalhes_post, null), postAux)).create();
+			new AlertDialog.Builder(getActivity())
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Detalhes do Post")
+			.setView(detalhe)
+			.setPositiveButton("Fechar", null)
+			.show();
 			break;
 		case R.id.menu_contexto_excluir:
 			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
