@@ -6,18 +6,21 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Categoria;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOCategoria extends Connection {
+public class DAOCategoria {
 
 	public final static String TABLE = "categoria";
+	private SQLiteDatabase database = null;
 
 	public DAOCategoria(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 	
 	public long inserir(Categoria categoria, Post idPost){
@@ -25,7 +28,7 @@ public class DAOCategoria extends Connection {
 		values.put("nome", categoria.getNome());
 		values.put("url", categoria.getUrl());
 		values.put("idPost", idPost.getIdPost());
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -35,7 +38,7 @@ public class DAOCategoria extends Connection {
 		values.put("nome", categoria.getNome());
 		values.put("url", categoria.getUrl());
 		values.put("idFeed", idFeed.getIdFeed());
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -45,14 +48,14 @@ public class DAOCategoria extends Connection {
 		values.put("acesso", acesso);
 		String[] args = {feed.getIdFeed()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idFeed = ?", args);
+		return database.update(TABLE, values, "idFeed = ?", args);
 	}
 	public int atualizaAcesso(Post post, int acesso){
 		ContentValues values = new ContentValues();
 		values.put("acesso", acesso);
 		String[] args = {post.getIdPost()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+		return database.update(TABLE, values, "idPost = ?", args);
 	}
 
 	public List<Categoria> listarTudo(Post post){
@@ -61,7 +64,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Categoria categoria = new Categoria.Builder()
 				.idCategoria(cursor.getLong(cursor.getColumnIndex("idCategoria")))
@@ -83,7 +86,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Categoria categoria = new Categoria.Builder()
 				.idCategoria(cursor.getLong(cursor.getColumnIndex("idCategoria")))
@@ -106,7 +109,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				categoria = new Categoria.Builder()
 				.idCategoria(cursor.getLong(cursor.getColumnIndex("idCategoria")))
@@ -127,7 +130,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				categoria = new Categoria.Builder()
 				.idCategoria(cursor.getLong(cursor.getColumnIndex("idCategoria")))
@@ -148,7 +151,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select count(idCategoria) total from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				resultado = cursor.getLong(cursor.getColumnIndex("total"));
 			}
@@ -165,7 +168,7 @@ public class DAOCategoria extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select count(idCategoria) total from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				resultado = cursor.getLong(cursor.getColumnIndex("total"));
 			}
@@ -179,11 +182,11 @@ public class DAOCategoria extends Connection {
 
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		return getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return database.delete(TABLE, "idPost=?", args);
 	}
 	public int remover(Feed feed){
 		String[] args = {feed.getIdFeed()+""};
-		return getWritableDatabase().delete(TABLE, "idFeed=?", args);
+		return database.delete(TABLE, "idFeed=?", args);
 	}
 
 }

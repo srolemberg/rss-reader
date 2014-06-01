@@ -6,17 +6,20 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Anexo;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOAnexo extends Connection {
+public class DAOAnexo {
 
 	public final static String TABLE = "anexo";
+	private SQLiteDatabase database = null;
 
 	public DAOAnexo(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 	
 	public long inserir(Anexo anexo, long idPost){
@@ -25,7 +28,7 @@ public class DAOAnexo extends Connection {
 		values.put("tipo", anexo.getTipo());
 		values.put("url", anexo.getUrl());
 		values.put("idPost", idPost);
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -35,7 +38,7 @@ public class DAOAnexo extends Connection {
 		values.put("acesso", acesso);
 		String[] args = {post.getIdPost()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+		return database.update(TABLE, values, "idPost = ?", args);
 	}
 
 	public List<Anexo> listarTudo(Post post){
@@ -44,7 +47,7 @@ public class DAOAnexo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Anexo anexo = new Anexo.Builder()
 				.idAnexo(cursor.getLong(cursor.getColumnIndex("idAnexo")))
@@ -68,7 +71,7 @@ public class DAOAnexo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				anexo = new Anexo.Builder()
 				.idAnexo(cursor.getLong(cursor.getColumnIndex("idAnexo")))
@@ -87,7 +90,7 @@ public class DAOAnexo extends Connection {
 
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		return getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return database.delete(TABLE, "idPost=?", args);
 	}
 
 }

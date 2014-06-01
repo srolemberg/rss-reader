@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.SpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.adapter.ListarPostSpinnerAdapter;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.fragment.ExibirPostFragment;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
@@ -44,7 +45,7 @@ public class ExibirPostActivity extends Activity implements
 		postAux = (Post) getIntent().getExtras().get("Post");			
 		DAOPost daoPost = new DAOPost(this);
 		postListAux = daoPost.listarTudo(feedAux);
-		daoPost.close();
+		DatabaseManager.getInstance().closeDatabase();
 		
 		SpinnerAdapter adapter = new ListarPostSpinnerAdapter(postListAux, this);
 		//TODO: tentar conseguir um limitador do SpinnerAdapter

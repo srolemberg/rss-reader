@@ -7,17 +7,20 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOPost extends Connection {
+public class DAOPost {
 
 	public final static String TABLE = "post";
+	private SQLiteDatabase database = null;
 
 	public DAOPost(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 	
 	public long inserir(Post post, long idFeed){
@@ -29,7 +32,7 @@ public class DAOPost extends Connection {
 		values.put("data_atualizacao", post.getData_atualizacao()==null?null:post.getData_atualizacao().getTime());
 		values.put("link_URI", post.getLink_URI());
 		values.put("idFeed", idFeed);
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -39,7 +42,7 @@ public class DAOPost extends Connection {
 		values.put("acesso", acesso);
 		String[] args = {post.getIdPost()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+		return database.update(TABLE, values, "idPost = ?", args);
 	}
 
 	public List<Post> listarTudo(Feed feed){
@@ -48,7 +51,7 @@ public class DAOPost extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Post post = new Post.Builder()
 				.idPost(cursor.getLong(cursor.getColumnIndex("idPost")))
@@ -75,7 +78,7 @@ public class DAOPost extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select count(idPost) total from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				resultado = cursor.getLong(cursor.getColumnIndex("total"));
 			}
@@ -89,7 +92,7 @@ public class DAOPost extends Connection {
 
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		return getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return database.delete(TABLE, "idPost=?", args);
 	}
 
 }

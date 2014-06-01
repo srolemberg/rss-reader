@@ -6,17 +6,20 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Conteudo;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOConteudo extends Connection {
+public class DAOConteudo {
 
 	public final static String TABLE = "conteudo";
+	private SQLiteDatabase database = null;
 
 	public DAOConteudo(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 	
 	public long inserir(Conteudo conteudo, long idPost){
@@ -25,7 +28,7 @@ public class DAOConteudo extends Connection {
 		values.put("tipo", conteudo.getTipo());
 		values.put("valor", conteudo.getValor());
 		values.put("idPost", idPost);
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -35,7 +38,7 @@ public class DAOConteudo extends Connection {
 		values.put("acesso", acesso);
 		String[] args = {post.getIdPost()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idPost = ?", args);
+		return database.update(TABLE, values, "idPost = ?", args);
 	}
 
 	public long size(Post post){
@@ -44,7 +47,7 @@ public class DAOConteudo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select count(idConteudo) total from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				resultado = cursor.getLong(cursor.getColumnIndex("total"));
 			}
@@ -62,7 +65,7 @@ public class DAOConteudo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select idConteudo from "+TABLE+" where idPost = ? limit 1");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				resultado = true;
 			}
@@ -80,7 +83,7 @@ public class DAOConteudo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Conteudo conteudo = new Conteudo.Builder()
 				.idConteudo(cursor.getLong(cursor.getColumnIndex("idConteudo")))
@@ -104,7 +107,7 @@ public class DAOConteudo extends Connection {
 			String[] args = {post.getIdPost()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idPost = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				conteudo = new Conteudo.Builder()
 				.idConteudo(cursor.getLong(cursor.getColumnIndex("idConteudo")))
@@ -123,7 +126,7 @@ public class DAOConteudo extends Connection {
 
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
-		return getWritableDatabase().delete(TABLE, "idPost=?", args);
+		return database.delete(TABLE, "idPost=?", args);
 	}
 
 }

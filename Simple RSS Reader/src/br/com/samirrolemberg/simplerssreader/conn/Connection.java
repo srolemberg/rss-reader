@@ -12,6 +12,7 @@ public class Connection extends SQLiteOpenHelper{
 	
 	public Connection(Context context) {
 		super(context, DATABASE, null, VERSAO);
+		DatabaseManager.initializeInstance(this);
 	}
 	
 	@Override

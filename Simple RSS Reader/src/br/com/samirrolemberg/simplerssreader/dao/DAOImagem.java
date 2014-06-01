@@ -6,17 +6,20 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
-import br.com.samirrolemberg.simplerssreader.model.Imagem;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+import br.com.samirrolemberg.simplerssreader.model.Imagem;
 
-public class DAOImagem extends Connection {
+public class DAOImagem {
 
 	public final static String TABLE = "imagem";
+	private SQLiteDatabase database = null;
 
 	public DAOImagem(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 	
 	public long inserir(Imagem imagem, long idFeed){
@@ -26,7 +29,7 @@ public class DAOImagem extends Connection {
 		values.put("titulo", imagem.getTitulo());
 		values.put("url", imagem.getUrl());
 		values.put("idFeed", idFeed);
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 		
@@ -36,7 +39,7 @@ public class DAOImagem extends Connection {
 		values.put("acesso", acesso);
 		String[] args = {feed.getIdFeed()+""};
 
-		return getWritableDatabase().update(TABLE, values, "idFeed = ?", args);
+		return database.update(TABLE, values, "idFeed = ?", args);
 	}
 
 	public List<Imagem> listarTudo(Feed feed){
@@ -45,7 +48,7 @@ public class DAOImagem extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Imagem imagem = new Imagem.Builder()
 				.idImagem(cursor.getLong(cursor.getColumnIndex("idImagem")))
@@ -70,7 +73,7 @@ public class DAOImagem extends Connection {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE+" where idFeed = ?");
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), args);
+			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				imagem = new Imagem.Builder()
 				.idImagem(cursor.getLong(cursor.getColumnIndex("idImagem")))
@@ -90,7 +93,7 @@ public class DAOImagem extends Connection {
 
 	public void remover(Feed feed){
 		String[] args = {feed.getIdFeed()+""};
-		getWritableDatabase().delete(TABLE, "idFeed=?", args);
+		database.delete(TABLE, "idFeed=?", args);
 	}
 
 }

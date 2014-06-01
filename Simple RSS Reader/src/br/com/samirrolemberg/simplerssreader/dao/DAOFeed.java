@@ -7,17 +7,19 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import br.com.samirrolemberg.simplerssreader.conn.Connection;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 
-public class DAOFeed extends Connection {
+public class DAOFeed {
 
-	
 	public final static String TABLE = "feed";
+	private SQLiteDatabase database = null;
 
 	public DAOFeed(Context context) {
-		super(context);
+		super();
+		database = DatabaseManager.getInstance().openDatabase();
 	}
 
 	public long inserir(Feed feed){
@@ -35,7 +37,7 @@ public class DAOFeed extends Connection {
 		values.put("data_cadastro", new Date().getTime());
 		values.put("rss", feed.getRss());
 		
-		long id = getWritableDatabase().insert(TABLE, null, values);
+		long id = database.insert(TABLE, null, values);
 		
 		return id;
 	}
@@ -44,7 +46,7 @@ public class DAOFeed extends Connection {
 		ContentValues values = new ContentValues();
 		values.put("acesso", acesso);
 		String[] args = {feed.getIdFeed()+""};
-		return getWritableDatabase().update(TABLE, values, "idFeed=?", args);
+		return database.update(TABLE, values, "idFeed=?", args);
 	}
 	
 	public List<Feed> listarTudo(){
@@ -52,7 +54,7 @@ public class DAOFeed extends Connection {
 		try {
 			StringBuffer sql = new StringBuffer();
 			sql.append("select * from "+TABLE);
-			Cursor cursor = getWritableDatabase().rawQuery(sql.toString(), null);
+			Cursor cursor = database.rawQuery(sql.toString(), null);
 			while (cursor.moveToNext()) {
 				
 				Feed feed = new Feed.Builder()
@@ -83,6 +85,6 @@ public class DAOFeed extends Connection {
 	
 	public void remover(Feed feed){
 		String[] args = {feed.getIdFeed()+""};
-		getWritableDatabase().delete(TABLE, "idFeed=?", args);
+		database.delete(TABLE, "idFeed=?", args);
 	}
 }

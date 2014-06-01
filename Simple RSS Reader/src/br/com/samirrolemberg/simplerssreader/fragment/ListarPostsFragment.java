@@ -23,12 +23,14 @@ import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.ExibirPostActivity;
 import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.adapter.ListarPostsFragmentAdapter;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPostDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirPostTask;
 
 public class ListarPostsFragment extends Fragment{
 
@@ -51,7 +53,7 @@ public class ListarPostsFragment extends Fragment{
 	private void carregar(View view){
 		DAOPost daoPost = new DAOPost(getActivity());
 		postsFrag = daoPost.listarTudo(feedAux);
-		daoPost.close();
+		DatabaseManager.getInstance().closeDatabase();
 		listView = (ListView) view.findViewById(R.id.list_post__exibir_post_fragment);
 		ListarPostsFragmentAdapter adapter = new ListarPostsFragmentAdapter(postsFrag, listView);
 		listView.setAdapter(adapter);
@@ -64,7 +66,7 @@ public class ListarPostsFragment extends Fragment{
 		feedAux = (Feed) getArguments().get("Feed");
 		DAOPost daoPost = new DAOPost(getActivity());
 		postsFrag = daoPost.listarTudo(feedAux);
-		daoPost.close();
+		DatabaseManager.getInstance().closeDatabase();
 	}
 	
 	@Override
@@ -100,8 +102,8 @@ public class ListarPostsFragment extends Fragment{
 				boolean temConteudo = daoConteudo.isExist(postAux);
 				boolean temDescricao = daoDescricao.isExist(postAux);
 
-				daoConteudo.close();
-				daoDescricao.close();
+				DatabaseManager.getInstance().closeDatabase();
+				DatabaseManager.getInstance().closeDatabase();
 
 				if (temConteudo || temDescricao) {
 					Intent intent = new Intent(getActivity(), ExibirPostActivity.class);
@@ -155,16 +157,28 @@ public class ListarPostsFragment extends Fragment{
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Toast.makeText(getActivity(), "YES!!", Toast.LENGTH_SHORT).show();					
-					//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM POST
+					//remove o feed do banco apenas
 					DAOPost daoPost = new DAOPost(getActivity());
 					daoPost.remover(postAux);
-					daoPost.close();
-					DAODescricao daoDescricao = new DAODescricao(getActivity());
-					daoDescricao.remover(postAux);
-					daoDescricao.close();
-					carregar(view);
-					//TODO: TALVEZ SEJA NECESSÁRIO COLOCAR A REMOÇÃO EM BACKGROUND NA NOTIFICÇÃO
+					DatabaseManager.getInstance().closeDatabase();
+					carregar(view);//atualiza para o usuário
+					//remove o restante do post em background
+					ExcluirPostTask task = new ExcluirPostTask(getActivity(), postAux);
+					String[] params = {""};
+					task.execute(params);
+
+					
+					
+//					Toast.makeText(getActivity(), "YES!!", Toast.LENGTH_SHORT).show();					
+//					//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM POST
+//					DAOPost daoPost = new DAOPost(getActivity());
+//					daoPost.remover(postAux);
+//					daoPost.DatabaseManager.getInstance().closeDatabase();
+//					DAODescricao daoDescricao = new DAODescricao(getActivity());
+//					daoDescricao.remover(postAux);
+//					daoDescricao.DatabaseManager.getInstance().closeDatabase();
+//					carregar(view);
+//					//TODO: TALVEZ SEJA NECESSÁRIO COLOCAR A REMOÇÃO EM BACKGROUND NA NOTIFICÇÃO
 				}
 			})
 			.setNegativeButton("Não", null)

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import br.com.samirrolemberg.simplerssreader.R;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.model.Categoria;
@@ -71,7 +72,7 @@ public class DetalhesPostDialog {
 		}else{
 			categoriaLinear.setVisibility(View.GONE);
 		}
-		daoCategoria.close();
+		DatabaseManager.getInstance().closeDatabase();
 		
 		//post.getData_atualizacao();
 		if (post.getData_atualizacao()!=null) {
@@ -92,7 +93,7 @@ public class DetalhesPostDialog {
 		}else{
 			descricaoLinear.setVisibility(View.GONE);
 		}
-		daoDescricao.close();
+		DatabaseManager.getInstance().closeDatabase();
 		
 		//post.getLink();
 		if (post.getLink()!=null && !post.getLink().isEmpty()) {

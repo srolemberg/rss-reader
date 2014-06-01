@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
@@ -212,16 +213,16 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 				}
 			}
 			atualiza();//atualiza flag de acesso
-			daoAnexo.close();
-			daoCategoria.close();
-			daoConteudo.close();
-			daoDescricao.close();
-			daoImagem.close();
-			daoPost.close();
-			daoFeed.close();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
 		}
 		//TODO: COLOCAR UMA MUDANÇA DE FLAG NO FEED PARA SER ACESSÍVEL.
-		//daoFeed.close();
+		//daoFeed.DatabaseManager.getInstance().closeDatabase();
 		//TODO: JOGAR O PROCESSO DE ADIÇÃO EM BACKGROUND NUMA NOTIFICAÇÃO.
 	}
 }

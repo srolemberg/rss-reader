@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import br.com.samirrolemberg.simplerssreader.R;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.model.Conteudo;
@@ -57,8 +58,8 @@ public class ExibirPostFragment extends Fragment {
 		conteudosFrag = daoConteudo.listarTudo(postAux);
 		descricoesFrag = daoDescricao.listarTudo(postAux);
 		
-		daoConteudo.close();
-		daoDescricao.close();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
 
 	}
 	@Override
@@ -88,8 +89,8 @@ public class ExibirPostFragment extends Fragment {
 			//navegador.setText(Integer.toString(getArguments().getInt(ARG_POST_CONTENT)));
 
 		}
-		daoConteudo.close();
-		daoDescricao.close();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
 		return rootView;
 	}
 

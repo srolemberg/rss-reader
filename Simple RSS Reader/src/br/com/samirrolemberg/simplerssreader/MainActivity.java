@@ -19,6 +19,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
+import br.com.samirrolemberg.simplerssreader.dao.DAO;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
@@ -36,7 +38,7 @@ public class MainActivity extends Activity {
 		DAOFeed daoFeed = new DAOFeed(MainActivity.this);
 		
 		adapter = new ListaFeedAdapter(daoFeed.listarTudo(), this);			
-		daoFeed.close();
+		DatabaseManager.getInstance().closeDatabase();
 		
 		listaFeeds = (ListView) findViewById(R.id.lista_feeds);
 		listaFeeds.setAdapter(adapter);
@@ -51,6 +53,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//TODO: VER SE SERÁ NECESSÁRIO COLOCAR EM TODAS AS ACTIVITYS
+		new DAO(MainActivity.this);//para inicializar a instancia do banco caso não haja. 
+		//CRIA OU ATUALIZA O BANCO TAMBÉM
 		
 		carregar();
 
@@ -153,7 +159,7 @@ public class MainActivity extends Activity {
 					//remove o feed do banco apenas
 					DAOFeed daoFeed = new DAOFeed(MainActivity.this);
 					daoFeed.remover(feedAux);
-					daoFeed.close();
+					DatabaseManager.getInstance().closeDatabase();
 					carregar();//atualiza para o usuário
 					//remove o restante do feed em background
 					ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
@@ -223,13 +229,13 @@ public class MainActivity extends Activity {
 //			daoConteudo.remover(post);
 //		}
 //		
-//		daoFeed.close();
-//		daoPost.close();
-//		daoDescricao.close();
-//		daoImagem.close();
-//		daoAnexo.close();
-//		daoCategoria.close();
-//		daoConteudo.close();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
+//		DatabaseManager.getInstance().closeDatabase();
 //		
 //	}
 }

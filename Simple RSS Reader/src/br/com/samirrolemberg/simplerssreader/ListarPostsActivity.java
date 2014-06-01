@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.SpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedSpinnerAdapter;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.fragment.ListarPostsFragment;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
@@ -41,7 +42,7 @@ public class ListarPostsActivity extends FragmentActivity implements
 		}
 		DAOFeed daoFeed = new DAOFeed(this);
 		feedsAux = daoFeed.listarTudo();
-		daoFeed.close();
+		DatabaseManager.getInstance().closeDatabase();
 		
 		//ListaFeedSpinnerAdapter adapter = new ListaFeedSpinnerAdapter(daoFeed.listarTudo(), this);
 

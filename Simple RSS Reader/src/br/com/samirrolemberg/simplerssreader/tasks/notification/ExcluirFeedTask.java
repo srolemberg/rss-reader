@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
@@ -107,13 +108,13 @@ public class ExcluirFeedTask extends AsyncTask<String, Integer, Feed> {
             daoConteudo.remover(post);
 		}
 		
-		//daoFeed.close();
-		daoPost.close();
-		daoDescricao.close();
-		daoImagem.close();
-		daoAnexo.close();
-		daoCategoria.close();
-		daoConteudo.close();
+		//daoFeed.DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
+		DatabaseManager.getInstance().closeDatabase();
 		
 	}
 
@@ -192,14 +193,14 @@ public class ExcluirFeedTask extends AsyncTask<String, Integer, Feed> {
 //			}
 //			Log.w("OUTPUT-TEST", estimativa+" estimativa");
 //			Log.w("OUTPUT-TEST", atual+" atual");
-//			daoAnexo.close();
-//			daoCategoria.close();
-//			daoConteudo.close();
-//			daoDescricao.close();
-//			daoImagem.close();
-//			daoPost.close();
+//			daoAnexo.DatabaseManager.getInstance().closeDatabase();
+//			daoCategoria.DatabaseManager.getInstance().closeDatabase();
+//			daoConteudo.DatabaseManager.getInstance().closeDatabase();
+//			daoDescricao.DatabaseManager.getInstance().closeDatabase();
+//			daoImagem.DatabaseManager.getInstance().closeDatabase();
+//			daoPost.DatabaseManager.getInstance().closeDatabase();
 //		}
-//		daoFeed.close();
+//		daoFeed.DatabaseManager.getInstance().closeDatabase();
 //		//TODO: JOGAR O PROCESSO DE ADIÇÃO EM BACKGROUND NUMA NOTIFICAÇÃO.
 //	}
 }

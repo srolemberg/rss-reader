@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import br.com.samirrolemberg.simplerssreader.R;
+import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Categoria;
@@ -95,7 +96,7 @@ public class DetalhesFeedDialog {
 		}else{
 			categoriaLinear.setVisibility(View.GONE);
 		}
-		daoCategoria.close();
+		DatabaseManager.getInstance().closeDatabase();
 		//feed.getCodificacao();
 		if (feed.getCodificacao()!=null && !feed.getCodificacao().isEmpty()) {
 			codificacao.setText(feed.getCodificacao());
@@ -148,7 +149,7 @@ public class DetalhesFeedDialog {
 		DAOPost daoPost = new DAOPost(context);
 		long size = daoPost.size(feed);
 		registro.setText(""+size);
-		daoPost.close();
+		DatabaseManager.getInstance().closeDatabase();
 //		if (feed.getPosts()!=null && !feed.getAutor().isEmpty()) {
 //			autor.setText(feed.getAutor());
 //		}else{
