@@ -7,6 +7,9 @@
         android:id="@+id/menu_contexto_abrir_no_navegador"
         android:title="@string/menu_contexto_abrir_no_navegador"/>
     <item
+        android:id="@+id/menu_contexto_compartilhar"
+        android:title="@string/menu_contexto_compartilhar"/>
+    <item
         android:id="@+id/menu_contexto_excluir"
         android:title="@string/menu_contexto_excluir"/>
         

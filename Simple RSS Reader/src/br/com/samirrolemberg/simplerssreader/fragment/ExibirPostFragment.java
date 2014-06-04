@@ -91,6 +91,8 @@ public class ExibirPostFragment extends Fragment {
 		}
 		DatabaseManager.getInstance().closeDatabase();
 		DatabaseManager.getInstance().closeDatabase();
+		
+		setHasOptionsMenu(true);
 		return rootView;
 	}
 

@@ -4,6 +4,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Classe baseada neste link.
+ * http://stackoverflow.com/questions/2493331/what-are-the-best-practices-for-sqlite-on-android/3689883#3689883
+ * @author Samir
+ *
+ */
 public class DatabaseManager {
 
     private int mOpenCounter;

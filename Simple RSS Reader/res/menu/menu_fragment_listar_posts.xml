@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_fragment_listar_post_compartilhar"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_fragment_listar_post_compartilhar"
+        android:actionProviderClass="android.widget.ShareActionProvider"/>
+    <item
+        android:id="@+id/action_fragment_listar_post_recarregar"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_fragment_listar_post_recarregar"/>
+    <item
+        android:id="@+id/action_fragment_listar_post_limpar_conteudo"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_fragment_listar_post_limpar_conteudo"/>    
+    <item
+        android:id="@+id/action_fragment_listar_post_abrir_navegador"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_fragment_listar_post_abrir_navegador"/>    
+    <item
+        android:id="@+id/action_fragment_listar_post_detalhes"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_fragment_listar_post_detalhes"/>    
+</menu>

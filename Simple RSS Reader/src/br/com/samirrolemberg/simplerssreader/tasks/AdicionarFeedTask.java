@@ -7,6 +7,8 @@ import java.net.URL;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -36,14 +38,26 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 	private SyndFeed feed;
 	private ExceptionMessage e;
 	
+	private AdicionarFeedTask task = null;
+	
 	public AdicionarFeedTask(Context context){
+		super();
 		this.context = context;
+		this.task = this;
 	}
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
 		progress = ProgressDialog.show(getContext(), "Adicionar Feed", "Sincronizando FEED...",true,true);
+		progress.setOnCancelListener(new OnCancelListener() {			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Log.w("TASKS", "Cancel Task: "+task.getClass().getSimpleName());
+				task.cancel(true);
+				dialog.dismiss();
+			}
+		});
 	}
 	@Override
 	protected Feed doInBackground(String... arg) {
@@ -128,6 +142,8 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 				}
 			});
 		}else{
+			task.cancel(true);
+			progress.dismiss();
 			Toast.makeText(getContext(), "Não encontrado: "+e.getThrowable().getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}

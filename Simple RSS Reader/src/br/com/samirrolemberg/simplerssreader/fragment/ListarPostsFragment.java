@@ -47,6 +47,7 @@ public class ListarPostsFragment extends Fragment{
 	
 	private View view = null;// view que liga o fragment
 	
+	
 	public ListarPostsFragment() {//obrigatório
 	}
 
@@ -118,7 +119,7 @@ public class ListarPostsFragment extends Fragment{
 		
 		//registradores
 		registerForContextMenu(listView);
-
+		setHasOptionsMenu(true);
 		return view;
 	}
 	@Override
@@ -184,11 +185,16 @@ public class ListarPostsFragment extends Fragment{
 			.setNegativeButton("Não", null)
 			.show();
 			break;
+		case R.id.menu_contexto_compartilhar:
+			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+			
 		default:
 			Toast.makeText(getActivity(), "Dismiss", Toast.LENGTH_SHORT).show();
 			break;
 		}
 		return super.onContextItemSelected(item);
 	}
+	
 
 }

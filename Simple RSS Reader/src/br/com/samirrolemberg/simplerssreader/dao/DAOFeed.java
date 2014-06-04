@@ -42,6 +42,25 @@ public class DAOFeed {
 		return id;
 	}
 
+	public int atualiza(Feed feed, long idFeed){
+		ContentValues values = new ContentValues();
+		values.put("autor", feed.getAutor());
+		values.put("direitoAutoral", feed.getDireitoAutoral());
+		values.put("descricao", feed.getDescricao());
+		values.put("codificacao", feed.getCodificacao());
+		values.put("tipoFeed", feed.getTipoFeed());
+		values.put("idioma", feed.getIdioma());
+		values.put("link", feed.getLink());
+		values.put("data_publicacao", feed.getData_publicacao()==null?null:feed.getData_publicacao().getTime());
+		values.put("titulo", feed.getTitulo());
+		values.put("uri", feed.getUri());
+		values.put("data_cadastro", new Date().getTime());
+		//values.put("rss", feed.getRss()); essa informação é do usuário
+		String[] args = {idFeed+""};
+		return database.update(TABLE, values, "idFeed=?", args);
+	}
+
+	
 	public int atualizaAcesso(Feed feed, int acesso){
 		ContentValues values = new ContentValues();
 		values.put("acesso", acesso);

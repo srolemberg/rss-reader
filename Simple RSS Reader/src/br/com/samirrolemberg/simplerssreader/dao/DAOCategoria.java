@@ -43,6 +43,14 @@ public class DAOCategoria {
 		return id;
 		
 	}
+	public int atualiza(Categoria categoria, long idCategoria){
+		ContentValues values = new ContentValues();
+		values.put("nome", categoria.getNome());
+		values.put("url", categoria.getUrl());
+		String[] args = {idCategoria+""};
+		return database.update(TABLE, values, "idCategoria=?", args);
+	}
+
 	public int atualizaAcesso(Feed feed, int acesso){
 		ContentValues values = new ContentValues();
 		values.put("acesso", acesso);
@@ -178,6 +186,43 @@ public class DAOCategoria {
 		}
 		
 		return resultado;
+	}
+
+	public long existe(Categoria categoria, Post post) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {post.getIdPost()+"",categoria.getNome()};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idCategoria id from "+TABLE+" where idPost = ? and nome = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
+	}
+	public long existe(Categoria categoria, Feed feed) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {feed.getIdFeed()+"",categoria.getNome()};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idCategoria id from "+TABLE+" where idFeed = ? and nome = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
 	}
 
 	public int remover(Post post){

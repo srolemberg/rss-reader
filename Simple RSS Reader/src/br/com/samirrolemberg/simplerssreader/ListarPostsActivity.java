@@ -3,12 +3,16 @@ package br.com.samirrolemberg.simplerssreader;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedSpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
@@ -25,6 +29,8 @@ public class ListarPostsActivity extends FragmentActivity implements
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private Feed feedAux = null;
 	private List<Feed> feedsAux = null;
+	private ShareActionProvider mShareActionProvider = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +66,7 @@ public class ListarPostsActivity extends FragmentActivity implements
 		}else{
 			actionBar.setSelectedNavigationItem(0);
 		}
+
 	}
 	
 	@Override
@@ -78,22 +85,6 @@ public class ListarPostsActivity extends FragmentActivity implements
 				.getSelectedNavigationIndex());
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 	@Override
 	public boolean onNavigationItemSelected(int position, long id) {
@@ -111,5 +102,93 @@ public class ListarPostsActivity extends FragmentActivity implements
 				
 		return true;
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_fragment_listar_posts, menu);
+		
+		mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_fragment_listar_post_compartilhar).getActionProvider();
+		mShareActionProvider.setShareIntent(doShare());
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	private Intent doShare(){
+	    Intent intent = new Intent(Intent.ACTION_SEND);
+	    intent.setType("text/plain");
+	    intent.putExtra(Intent.EXTRA_SUBJECT, feedAux.getDescricao());
+	    intent.putExtra(Intent.EXTRA_TEXT, feedAux.getLink());
+	    intent.putExtra(Intent.EXTRA_TITLE, feedAux.getTitulo());
+	    return intent;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+			case R.id.action_fragment_listar_post_abrir_navegador:
+			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.action_fragment_listar_post_compartilhar:
+//		    // populate the share intent with data
+//		    Intent intent = new Intent(Intent.ACTION_SEND);
+//		    intent.setType("text/plain");
+//		    intent.putExtra(Intent.EXTRA_TEXT, "Put whatever you want");
+//			setShareIntent(intent);
+			break;
+		case R.id.action_fragment_listar_post_detalhes:
+			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.action_fragment_listar_post_limpar_conteudo:
+			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.action_fragment_listar_post_recarregar:
+			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+		default:
+			break;
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.action_fragment_listar_post_abrir_navegador:
+//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+//			break;
+////		case R.id.action_fragment_listar_post_compartilhar:
+////			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+////			Intent share = new Intent(Intent.ACTION_SEND);
+////			share.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
+////			share.putExtra(Intent.EXTRA_TEXT, "TEXT");
+////			share.putExtra(Intent.EXTRA_TITLE, "SUBJECT");
+////			startActivity(Intent.createChooser(share, "Share"));
+////			break;
+//		case R.id.action_fragment_listar_post_detalhes:
+//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+//			break;
+//		case R.id.action_fragment_listar_post_limpar_conteudo:
+//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+//			break;
+//		case R.id.action_fragment_listar_post_recarregar:
+//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+//			break;
+//		default:
+//			break;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
+
+	
 
 }

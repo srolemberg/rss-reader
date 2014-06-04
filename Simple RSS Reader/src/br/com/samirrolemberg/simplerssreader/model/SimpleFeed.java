@@ -3,6 +3,8 @@ package br.com.samirrolemberg.simplerssreader.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndCategoryImpl;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndContentImpl;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndEnclosureImpl;
@@ -109,6 +111,8 @@ public class SimpleFeed {
 					.valor(d.getValue()==null?null:d.getValue())
 					.build();
 				}
+				//Log.i("ADDFEED","port pub-date"+synd.getPublishedDate());
+				//Log.i("ADDFEED","port pub-date-up"+synd.getUpdatedDate());
 				Post post = new Post.Builder()
 				.autor(synd.getAuthor()==null?null:synd.getAuthor())
 				.link(synd.getLink()==null?null:synd.getLink())

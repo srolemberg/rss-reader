@@ -18,6 +18,7 @@ import br.com.samirrolemberg.simplerssreader.u.U;
 
 public class AdicionarFeedActivity extends Activity {
 
+	private AdicionarFeedTask task = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,7 +36,8 @@ public class AdicionarFeedActivity extends Activity {
 						Toast.makeText(AdicionarFeedActivity.this, "Enter button "+url.getText().toString(), Toast.LENGTH_SHORT).show();
 						LinearLayout layout = (LinearLayout) findViewById(R.id.dados_feed__adicionar_feed_activity);
 						layout.setVisibility(View.GONE);
-						AdicionarFeedTask task = new AdicionarFeedTask(AdicionarFeedActivity.this);
+
+						task = new AdicionarFeedTask(AdicionarFeedActivity.this);
 						String[] params = {url.getText().toString()};
 						task.execute(params);
 					}else{

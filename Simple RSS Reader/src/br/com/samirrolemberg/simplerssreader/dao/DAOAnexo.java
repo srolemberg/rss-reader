@@ -93,4 +93,33 @@ public class DAOAnexo {
 		return database.delete(TABLE, "idPost=?", args);
 	}
 
+	public long existe(Anexo anexo, long idPost) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {idPost+"",anexo.getUrl()};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idAnexo id from "+TABLE+" where idPost = ? and url = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
+	}
+
+	public int atualiza(Anexo anexo, long idAnexo) {
+		ContentValues values = new ContentValues();
+		values.put("tamanho", anexo.getTamanho());
+		values.put("tipo", anexo.getTipo());
+		values.put("url", anexo.getUrl());
+		String[] args = {idAnexo+""};
+
+		return database.update(TABLE, values, "idAnexo = ?", args);
+	}
+
 }

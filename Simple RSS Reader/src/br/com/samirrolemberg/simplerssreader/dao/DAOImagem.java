@@ -1,6 +1,7 @@
 package br.com.samirrolemberg.simplerssreader.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -34,6 +35,16 @@ public class DAOImagem {
 		return id;
 		
 	}
+	public int atualiza(Imagem imagem, long idFeed){
+		ContentValues values = new ContentValues();
+		values.put("descricao", imagem.getDescricao());
+		values.put("link", imagem.getLink());
+		values.put("titulo", imagem.getTitulo());
+		values.put("url", imagem.getUrl());
+		String[] args = {idFeed+""};
+		return database.update(TABLE, values, "idFeed=?", args);
+	}
+
 	public int atualizaAcesso(Feed feed, int acesso){
 		ContentValues values = new ContentValues();
 		values.put("acesso", acesso);

@@ -14,6 +14,15 @@ public class Executando {
 	 * e o valor 1 é adicionado á chave como valor de execução.
 	 */
 	public final static Map<String, Integer> ADICIONAR_FEED = new HashMap<String, Integer>();
+	/**
+	 * Armazena um conteúdo de um feed que está sendo ATUALIZADO na Task de AtualizarFeedTask.java
+	 * O link do rss é adicionado no onpreexecute e removido no onpostexecute da mesma tarefa
+	 * verificar na activity se o link do feed recem adicionado ainda etsá nessa fila.
+	 * a chave de comparação é feita com
+	 * feedAux.getIdFeed()+feedAux.getRss()
+	 * e o valor 1 é adicionado á chave como valor de execução.
+	 */
+	public final static Map<String, Integer> ATUALIZA_FEED = new HashMap<String, Integer>();
 	
 	private Executando(){
 		super();

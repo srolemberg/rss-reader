@@ -24,9 +24,11 @@ import br.com.samirrolemberg.simplerssreader.dao.DAO;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.LimparConteudoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
+import br.com.samirrolemberg.simplerssreader.u.U;
 
 public class MainActivity extends Activity {
 
@@ -111,6 +113,19 @@ public class MainActivity extends Activity {
 			break;
 		case R.id.menu_contexto_atualizar_feed:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+				//se está atualizando o feed
+				if (U.isConnected(MainActivity.this)) {
+					//se tem conexão de internet
+					AtualizarFeedTask task = new AtualizarFeedTask(MainActivity.this, feedAux);
+					String[] params = {feedAux.getRss().toString()};
+					task.execute(params);
+				}else{
+					Toast.makeText(MainActivity.this, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
+				}
+			}else{
+				Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+			}
 			break;
 		case R.id.menu_contexto_detalhes:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
