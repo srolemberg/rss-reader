@@ -76,7 +76,7 @@ public class DAODescricao {
 		
 		return resultado;
 	}
-	
+		
 	public List<Descricao> listarTudo(Post post){
 		List<Descricao> descricoes = new ArrayList<Descricao>();
 		try {
@@ -124,6 +124,36 @@ public class DAODescricao {
 		return descricao;
 	}
 
+	public long existe(Descricao descricao, long idPost) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {idPost+"",descricao.getValor()};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idDescricao id from "+TABLE+" where idPost = ? and valor = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
+	}
+
+	public int atualiza(Descricao descricao, long idDescricao) {
+		ContentValues values = new ContentValues();
+		values.put("modo", descricao.getModo());
+		values.put("tipo", descricao.getTipo());
+		values.put("valor", descricao.getValor());
+		String[] args = {idDescricao+""};
+
+		return database.update(TABLE, values, "idDescricao = ?", args);
+	}
+
+	
 	public int remover(Post post){
 		String[] args = {post.getIdPost()+""};
 		return database.delete(TABLE, "idPost=?", args);

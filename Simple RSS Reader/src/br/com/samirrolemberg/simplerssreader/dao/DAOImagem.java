@@ -1,7 +1,6 @@
 package br.com.samirrolemberg.simplerssreader.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -105,6 +104,25 @@ public class DAOImagem {
 	public void remover(Feed feed){
 		String[] args = {feed.getIdFeed()+""};
 		database.delete(TABLE, "idFeed=?", args);
+	}
+
+	public long existe(Imagem imagem, Feed feed) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {feed.getIdFeed()+"",feed.getUri()};//TODO VER NO BANCO SE PRECISA MUDAR DE URI PARA URL
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idCategoria id from "+TABLE+" where idFeed = ? and url = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
 	}
 
 }

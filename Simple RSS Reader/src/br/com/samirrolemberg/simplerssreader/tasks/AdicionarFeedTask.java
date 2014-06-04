@@ -12,19 +12,14 @@ import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.AdicionarFeedActivity;
 import br.com.samirrolemberg.simplerssreader.R;
-import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
-import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.model.ExceptionMessage;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.SimpleFeed;
-import br.com.samirrolemberg.simplerssreader.tasks.notification.SalvarNovoFeedTask;
 
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import com.google.code.rome.android.repackaged.com.sun.syndication.io.FeedException;
@@ -40,12 +35,23 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 	
 	private AdicionarFeedTask task = null;
 	
+	private Object resultado;
+	
 	public AdicionarFeedTask(Context context){
 		super();
 		this.context = context;
 		this.task = this;
+		this.resultado = null;//zera o resultado em uma nova threas
 	}
 	
+	/**
+	 * O Retorno é compativel com a AsyncTask
+	 * @return object
+	 */
+	public Object getResultado() {return resultado;}
+	public void setResultado(Object resultado) {this.resultado = resultado;}
+
+
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -55,6 +61,7 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 			public void onCancel(DialogInterface dialog) {
 				Log.w("TASKS", "Cancel Task: "+task.getClass().getSimpleName());
 				task.cancel(true);
+				setResultado(null);
 				dialog.dismiss();
 			}
 		});
@@ -104,6 +111,7 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 		super.onPostExecute(result);
 		progress.dismiss();
 		if (result!=null) {
+			setResultado(result);//adiciona o cara novo
 			//Log.w("OUTPUT-TEST", result.toString());
 			
 			final AdicionarFeedActivity activity = (AdicionarFeedActivity) getContext();
@@ -115,7 +123,7 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 			TextView link 		= (TextView) activity.findViewById(R.id.link__adicionar_feed_activity);
 			TextView idioma 	= (TextView) activity.findViewById(R.id.idioma__adicionar_feed_activity);
 			TextView categoria 	= (TextView) activity.findViewById(R.id.categoria__adicionar_feed_activity);
-			Button adicionar 	= (Button)	 activity.findViewById(R.id.adicionar__adicionar_feed_activity);
+			//Button adicionar 	= (Button)	 activity.findViewById(R.id.adicionar__adicionar_feed_activity);
 
 			nome.setText(result.getTitulo());
 			descricao.setText(result.getDescricao());
@@ -123,25 +131,26 @@ public class AdicionarFeedTask extends AsyncTask<String, Integer, Feed> {
 			idioma.setText(result.getIdioma());
 			categoria.setText(result.getCategorias().toString());
 						
-
-			adicionar.setOnClickListener(new OnClickListener() {				
-				@Override
-				public void onClick(View v) {
-					DAOFeed daoFeed = new DAOFeed(getContext());//adiciona os dados do feed vazio
-					long idFeed = daoFeed.inserir(result);//retorna o id do novo feed
-					DatabaseManager.getInstance().closeDatabase();
-					//repassa o id do novo feed vazio que sera exibido na outra tela! não poderá acessar até que a task mude a flag
-					SalvarNovoFeedTask task = new SalvarNovoFeedTask(getContext(), result, idFeed);
-					String[] params = {""};
-					task.execute(params);
-					//NavUtils.navigateUpFromSameTask(activity);
-					activity.onBackPressed();
-					//TODO: !1 USAR O NAVUTILS NO FUTURO E COLOCOCAR UMA FLAGNO BANCO PARA NÃO EXIBIR O FEED QUE AINDA ESTÁ ATUALIZANDO
-					//TODO: !1 DEPOIS ATUALIZAR TODOS E EXIBIR UM TOEAST
-					
-				}
-			});
+//foi para a actiituy dona da task
+//			adicionar.setOnClickListener(new OnClickListener() {				
+//				@Override
+//				public void onClick(View v) {
+//					DAOFeed daoFeed = new DAOFeed(getContext());//adiciona os dados do feed vazio
+//					long idFeed = daoFeed.inserir(result);//retorna o id do novo feed
+//					DatabaseManager.getInstance().closeDatabase();
+//					//repassa o id do novo feed vazio que sera exibido na outra tela! não poderá acessar até que a task mude a flag
+//					SalvarNovoFeedTask task = new SalvarNovoFeedTask(getContext(), result, idFeed);
+//					String[] params = {""};
+//					task.execute(params);
+//					//NavUtils.navigateUpFromSameTask(activity);
+//					activity.onBackPressed();
+//					//TODO: !1 USAR O NAVUTILS NO FUTURO E COLOCOCAR UMA FLAGNO BANCO PARA NÃO EXIBIR O FEED QUE AINDA ESTÁ ATUALIZANDO
+//					//TODO: !1 DEPOIS ATUALIZAR TODOS E EXIBIR UM TOEAST
+//					
+//				}
+//			});
 		}else{
+			setResultado(null);
 			task.cancel(true);
 			progress.dismiss();
 			Toast.makeText(getContext(), "Não encontrado: "+e.getThrowable().getMessage(), Toast.LENGTH_SHORT).show();

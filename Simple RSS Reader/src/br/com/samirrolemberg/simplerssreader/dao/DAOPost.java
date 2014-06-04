@@ -102,30 +102,28 @@ public class DAOPost {
 			String where = "";
 			List<String> lista = new LinkedList<String>();
 			
+			if (post.getLink_URI()!=null) {
+				if (where.trim().isEmpty()) {					
+					where += " where link_URI = ? ";
+				}				
+				lista.add(post.getLink_URI());
+			}else
 			if (post.getLink()!=null) {
 				if (where.trim().isEmpty()) {					
 					where += " where link = ? ";
 				}
 				lista.add(post.getLink());
-			}
-			if (post.getLink_URI()!=null) {
-				if (where.trim().isEmpty()) {					
-					where += " where link_URI = ? ";
-				}else{
-					where += " or link_URI ? ";
-				}				
-				lista.add(post.getLink_URI());
-			}
+			}else
 			if (post.getTitulo()!=null) {
 				if (where.trim().isEmpty()) {					
 					where += " where titulo = ? ";
-				}else{
-					where += " or titulo ? ";
 				}
 				lista.add(post.getTitulo());
 			}
 			if (!where.trim().isEmpty()) {
-				String[] args = (String[])lista.toArray();
+				//String[] args = (String[])lista.toArray();
+				String[] args = new String[lista.size()];
+				args = lista.toArray(args);
 				
 				StringBuffer sql = new StringBuffer();
 				sql.append("select idPost id from "+TABLE+where);
@@ -150,7 +148,7 @@ public class DAOPost {
 		values.put("titulo", post.getTitulo());
 		values.put("data_atualizacao", post.getData_atualizacao()==null?null:post.getData_atualizacao().getTime());
 		values.put("link_URI", post.getLink_URI());
-		String[] args = {post.getIdPost()+""};
+		String[] args = {idPost+""};
 
 		return database.update(TABLE, values, "idPost = ?", args);
 	}

@@ -129,4 +129,33 @@ public class DAOConteudo {
 		return database.delete(TABLE, "idPost=?", args);
 	}
 
+	public long existe(Conteudo conteudo, Post post) {
+		//select idAnexo id from anexo where idPost = ? and url = ?
+		long retorno = 0;
+		try {
+			String[] args = {post.getIdPost()+"",conteudo.getValor()};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select idConteudo id from "+TABLE+" where idPost = ? and valor = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				retorno = cursor.getLong(cursor.getColumnIndex("id"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+
+		return retorno;
+	}
+
+	public int atualiza(Conteudo conteudo, long idConteudo) {
+		ContentValues values = new ContentValues();
+		values.put("modo", conteudo.getModo());
+		values.put("tipo", conteudo.getTipo());
+		values.put("valor", conteudo.getValor());
+		String[] args = {idConteudo+""};
+
+		return database.update(TABLE, values, "idConteudo = ?", args);
+	}
+
 }
