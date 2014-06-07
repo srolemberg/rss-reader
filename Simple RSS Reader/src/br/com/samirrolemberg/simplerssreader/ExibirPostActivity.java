@@ -7,8 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListarPostSpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
@@ -28,7 +31,8 @@ public class ExibirPostActivity extends Activity implements
 	private Feed feedAux = null;
 	private Post postAux = null;
 	private List<Post> postListAux = null;
-	
+	private ShareActionProvider mShareActionProvider = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,13 +104,34 @@ public class ExibirPostActivity extends Activity implements
 //	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_fragment_exibir_post, menu);
+		
+		mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_fragment_exibir_post_compartilhar).getActionProvider();
+		mShareActionProvider.setShareIntent(doShare());
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	private Intent doShare(){
+	    Intent intent = new Intent(Intent.ACTION_SEND);
+	    intent.setType("text/plain");
+	    //intent.putExtra(Intent.EXTRA_SUBJECT, postAux.getDescricao());
+	    intent.putExtra(Intent.EXTRA_TEXT, postAux.getLink());
+	    intent.putExtra(Intent.EXTRA_TITLE, postAux.getTitulo());
+	    return intent;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		//if (id == R.id.action_settings) {
-		if (id == android.R.id.home) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
 			//NavUtils.navigateUpFromSameTask(this);
 			//NECESSITA QUE SEJA REPASSADO OS DADOS DO FEED QUE ESTAVA SENDO LIDO NA TELA ANTERIOR
 			//COM O ESQUEMA DE HOME O ANDROID DESTROI A TELA ANTERIOR E REMONTA COM OS DADOS ANTIGOS
@@ -116,10 +141,48 @@ public class ExibirPostActivity extends Activity implements
 			intent.putExtra("Feed", feedAux);
 			//intent.putExtra("Post", postAux); - resolver esse intent se um dia precisar resetar a posição do feed que foi lido na tela anterior
 			NavUtils.navigateUpTo(this, intent);
-			return true;
+			break;
+//		case R.id.action_fragment_exibir_post_compartilhar:
+//		    // populate the share intent with data
+//		    Intent intent = new Intent(Intent.ACTION_SEND);
+//		    intent.setType("text/plain");
+//		    intent.putExtra(Intent.EXTRA_TEXT, "Put whatever you want");
+//			setShareIntent(intent);
+//			break;
+		case R.id.action_fragment_exibir_post_detalhes:
+			Toast.makeText(ExibirPostActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			break;
+		default:
+			break;
+
 		}
-		return super.onOptionsItemSelected(item);
+		//return super.onOptionsItemSelected(item);
+		return true;
 	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		// Handle action bar item clicks here. The action bar will
+//		// automatically handle clicks on the Home/Up button, so long
+//		// as you specify a parent activity in AndroidManifest.xml.
+//		int id = item.getItemId();
+//		//if (id == R.id.action_settings) {
+//		if (id == android.R.id.home) {
+//			//NavUtils.navigateUpFromSameTask(this);
+//			//NECESSITA QUE SEJA REPASSADO OS DADOS DO FEED QUE ESTAVA SENDO LIDO NA TELA ANTERIOR
+//			//COM O ESQUEMA DE HOME O ANDROID DESTROI A TELA ANTERIOR E REMONTA COM OS DADOS ANTIGOS
+//			//COM ON BACK PRESS ELE SIMPLEMENTE RETORNA PARA UMA TELA ANTERIOR QUE NÃO NECESSARIAMENE
+//			//SERA A SUA
+//			Intent intent = new Intent(this, ListarPostsActivity.class);
+//			intent.putExtra("Feed", feedAux);
+//			//intent.putExtra("Post", postAux); - resolver esse intent se um dia precisar resetar a posição do feed que foi lido na tela anterior
+//			NavUtils.navigateUpTo(this, intent);
+//			return true;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
+	
+	
 
 //	@Override
 //	public boolean onOptionsItemSelected(MenuItem item) {

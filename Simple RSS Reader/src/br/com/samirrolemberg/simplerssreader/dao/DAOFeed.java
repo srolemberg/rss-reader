@@ -60,6 +60,13 @@ public class DAOFeed {
 		return database.update(TABLE, values, "idFeed=?", args);
 	}
 
+	public int atualizaDataPublicacao(Feed feed){
+		ContentValues values = new ContentValues();
+		values.putNull("data_publicacao");
+		String[] args = {feed.getIdFeed()+""};
+		Log.i("OUTPUT-TEST", feed.toString());
+		return database.update(TABLE, values, "idFeed=?", args);
+	}
 	
 	public int atualizaAcesso(Feed feed, int acesso){
 		ContentValues values = new ContentValues();

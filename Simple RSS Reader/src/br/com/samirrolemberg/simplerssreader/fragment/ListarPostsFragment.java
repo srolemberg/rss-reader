@@ -31,6 +31,7 @@ import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPostDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirPostTask;
+import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class ListarPostsFragment extends Fragment{
 
@@ -122,6 +123,23 @@ public class ListarPostsFragment extends Fragment{
 		setHasOptionsMenu(true);
 		return view;
 	}
+//	private Intent doShare(){
+//	    Intent intent = new Intent(Intent.ACTION_SEND);
+//	    intent.setType("text/plain");
+//	    intent.putExtra(Intent.EXTRA_SUBJECT, feedAux.getDescricao());
+//	    intent.putExtra(Intent.EXTRA_TEXT, feedAux.getLink());
+//	    intent.putExtra(Intent.EXTRA_TITLE, feedAux.getTitulo());
+//	    return intent;
+//	}
+	private Intent doSharePost(){
+	    Intent intent = new Intent(Intent.ACTION_SEND);
+	    intent.setType("text/plain");
+	    //intent.putExtra(Intent.EXTRA_SUBJECT, feedAux.getDescricao());
+	    intent.putExtra(Intent.EXTRA_TEXT, postAux.getLink());
+	    intent.putExtra(Intent.EXTRA_TITLE, postAux.getTitulo());
+	    return intent;
+	}
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		//Menu de contexto da lista de feeds
@@ -131,13 +149,13 @@ public class ListarPostsFragment extends Fragment{
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_contexto_abrir_no_navegador:
+		case R.id.menu_contexto_lista_abrir_no_navegador:
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			Uri uri = Uri.parse(postAux.getLink());
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 			startActivity(intent);
 			break;
-		case R.id.menu_contexto_detalhes:
+		case R.id.menu_contexto_lista_detalhes:
 			//Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -149,7 +167,7 @@ public class ListarPostsFragment extends Fragment{
 			.setPositiveButton("Fechar", null)
 			.show();
 			break;
-		case R.id.menu_contexto_excluir:
+		case R.id.menu_contexto_lista_excluir:
 			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(getActivity())
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -158,35 +176,42 @@ public class ListarPostsFragment extends Fragment{
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					//remove o feed do banco apenas
-					DAOPost daoPost = new DAOPost(getActivity());
-					daoPost.remover(postAux);
-					DatabaseManager.getInstance().closeDatabase();
-					carregar(view);//atualiza para o usuário
-					//remove o restante do post em background
-					ExcluirPostTask task = new ExcluirPostTask(getActivity(), postAux);
-					String[] params = {""};
-					task.execute(params);
+					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+						
+						//remove o feed do banco apenas
+						DAOPost daoPost = new DAOPost(getActivity());
+						daoPost.remover(postAux);
+						DatabaseManager.getInstance().closeDatabase();
+						carregar(view);//atualiza para o usuário
+						//remove o restante do post em background
+						ExcluirPostTask task = new ExcluirPostTask(getActivity(), postAux);
+						String[] params = {""};
+						task.execute(params);
 
-					
-					
-//					Toast.makeText(getActivity(), "YES!!", Toast.LENGTH_SHORT).show();					
-//					//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM POST
-//					DAOPost daoPost = new DAOPost(getActivity());
-//					daoPost.remover(postAux);
-//					daoPost.DatabaseManager.getInstance().closeDatabase();
-//					DAODescricao daoDescricao = new DAODescricao(getActivity());
-//					daoDescricao.remover(postAux);
-//					daoDescricao.DatabaseManager.getInstance().closeDatabase();
-//					carregar(view);
-//					//TODO: TALVEZ SEJA NECESSÁRIO COLOCAR A REMOÇÃO EM BACKGROUND NA NOTIFICÇÃO
+						
+						
+//						Toast.makeText(getActivity(), "YES!!", Toast.LENGTH_SHORT).show();					
+//						//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM POST
+//						DAOPost daoPost = new DAOPost(getActivity());
+//						daoPost.remover(postAux);
+//						daoPost.DatabaseManager.getInstance().closeDatabase();
+//						DAODescricao daoDescricao = new DAODescricao(getActivity());
+//						daoDescricao.remover(postAux);
+//						daoDescricao.DatabaseManager.getInstance().closeDatabase();
+//						carregar(view);
+//						//TODO: TALVEZ SEJA NECESSÁRIO COLOCAR A REMOÇÃO EM BACKGROUND NA NOTIFICÇÃO
+						
+					}else{
+						Toast.makeText(getActivity(), "Este post está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+					}
 				}
 			})
 			.setNegativeButton("Não", null)
 			.show();
 			break;
-		case R.id.menu_contexto_compartilhar:
+		case R.id.menu_contexto_lista_compartilhar:
 			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			startActivity(doSharePost());
 			break;
 			
 		default:

@@ -1,19 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_contexto_detalhes"
+        android:id="@+id/menu_contexto_feeds_detalhes"
         android:title="@string/menu_contexto_detalhes"/>
     <item
-        android:id="@+id/menu_contexto_abrir_no_navegador"
+        android:id="@+id/menu_contexto_feeds_abrir_no_navegador"
         android:title="@string/menu_contexto_abrir_no_navegador"/>
     <item
-        android:id="@+id/menu_contexto_atualizar_feed"
+        android:id="@+id/menu_contexto_feeds_atualizar_feed"
         android:title="@string/menu_contexto_atualizar_feed"/>
     <item
-        android:id="@+id/menu_contexto_limpar_conteudo"
+        android:id="@+id/menu_contexto_feeds_limpar_conteudo"
         android:title="@string/menu_contexto_limpar"/>
     <item
-        android:id="@+id/menu_contexto_excluir"
+        android:id="@+id/menu_contexto_feeds_excluir"
         android:title="@string/menu_contexto_excluir"/>
         
 </menu>

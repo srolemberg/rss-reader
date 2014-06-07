@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedSpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
@@ -31,6 +30,35 @@ public class ListarPostsActivity extends FragmentActivity implements
 	private List<Feed> feedsAux = null;
 	private ShareActionProvider mShareActionProvider = null;
 
+	
+	private void carregar(ActionBar actionBar){
+		DAOFeed daoFeed = new DAOFeed(this);
+		feedsAux = daoFeed.listarTudo();
+		DatabaseManager.getInstance().closeDatabase();
+
+		SpinnerAdapter adapter = new ListaFeedSpinnerAdapter(feedsAux, this);
+		//TODO: tentar conseguir um limitador do SpinnerAdapter
+
+		actionBar.setListNavigationCallbacks(adapter, this);
+		if (feedAux!=null) {			
+			for (int i = 0; i < feedsAux.size(); i++) {
+				if (feedAux.getIdFeed()==feedsAux.get(i).getIdFeed()) {
+					actionBar.setSelectedNavigationItem(i);
+					break;
+				}
+			}
+		}else{
+			actionBar.setSelectedNavigationItem(0);
+		}
+
+//		adapter = new ListaFeedAdapter(daoFeed.listarTudo(), this);			
+//		DatabaseManager.getInstance().closeDatabase();
+//		
+//		listaFeeds = (ListView) findViewById(R.id.lista_feeds);
+//		listaFeeds.setAdapter(adapter);
+
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,26 +74,27 @@ public class ListarPostsActivity extends FragmentActivity implements
 		if (getIntent().getExtras()!=null) {
 			feedAux = (Feed) getIntent().getExtras().get("Feed");
 		}
-		DAOFeed daoFeed = new DAOFeed(this);
-		feedsAux = daoFeed.listarTudo();
-		DatabaseManager.getInstance().closeDatabase();
-		
-		//ListaFeedSpinnerAdapter adapter = new ListaFeedSpinnerAdapter(daoFeed.listarTudo(), this);
-
-		SpinnerAdapter adapter = new ListaFeedSpinnerAdapter(feedsAux, this);
-		//TODO: tentar conseguir um limitador do SpinnerAdapter
-		
-		actionBar.setListNavigationCallbacks(adapter, this);
-		if (feedAux!=null) {			
-			for (int i = 0; i < feedsAux.size(); i++) {
-				if (feedAux.getIdFeed()==feedsAux.get(i).getIdFeed()) {
-					actionBar.setSelectedNavigationItem(i);
-					break;
-				}
-			}
-		}else{
-			actionBar.setSelectedNavigationItem(0);
-		}
+		carregar(actionBar);
+//		DAOFeed daoFeed = new DAOFeed(this);
+//		feedsAux = daoFeed.listarTudo();
+//		DatabaseManager.getInstance().closeDatabase();
+//		
+//		//ListaFeedSpinnerAdapter adapter = new ListaFeedSpinnerAdapter(daoFeed.listarTudo(), this);
+//
+//		SpinnerAdapter adapter = new ListaFeedSpinnerAdapter(feedsAux, this);
+//		//TODO: tentar conseguir um limitador do SpinnerAdapter
+//		
+//		actionBar.setListNavigationCallbacks(adapter, this);
+//		if (feedAux!=null) {			
+//			for (int i = 0; i < feedsAux.size(); i++) {
+//				if (feedAux.getIdFeed()==feedsAux.get(i).getIdFeed()) {
+//					actionBar.setSelectedNavigationItem(i);
+//					break;
+//				}
+//			}
+//		}else{
+//			actionBar.setSelectedNavigationItem(0);
+//		}
 
 	}
 	
@@ -133,62 +162,12 @@ public class ListarPostsActivity extends FragmentActivity implements
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-			case R.id.action_fragment_listar_post_abrir_navegador:
-			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			break;
-		case R.id.action_fragment_listar_post_compartilhar:
-//		    // populate the share intent with data
-//		    Intent intent = new Intent(Intent.ACTION_SEND);
-//		    intent.setType("text/plain");
-//		    intent.putExtra(Intent.EXTRA_TEXT, "Put whatever you want");
-//			setShareIntent(intent);
-			break;
-		case R.id.action_fragment_listar_post_detalhes:
-			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			break;
-		case R.id.action_fragment_listar_post_limpar_conteudo:
-			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			break;
 		case R.id.action_fragment_listar_post_recarregar:
-			Toast.makeText(ListarPostsActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			break;
+			carregar(getActionBar());
 		default:
 			break;
 
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case R.id.action_fragment_listar_post_abrir_navegador:
-//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-//			break;
-////		case R.id.action_fragment_listar_post_compartilhar:
-////			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-////			Intent share = new Intent(Intent.ACTION_SEND);
-////			share.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
-////			share.putExtra(Intent.EXTRA_TEXT, "TEXT");
-////			share.putExtra(Intent.EXTRA_TITLE, "SUBJECT");
-////			startActivity(Intent.createChooser(share, "Share"));
-////			break;
-//		case R.id.action_fragment_listar_post_detalhes:
-//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-//			break;
-//		case R.id.action_fragment_listar_post_limpar_conteudo:
-//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-//			break;
-//		case R.id.action_fragment_listar_post_recarregar:
-//			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-//			break;
-//		default:
-//			break;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
-
-	
-
 }

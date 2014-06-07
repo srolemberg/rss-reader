@@ -1,16 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_contexto_detalhes"
+        android:id="@+id/menu_contexto_lista_detalhes"
         android:title="@string/menu_contexto_detalhes"/>
     <item
-        android:id="@+id/menu_contexto_abrir_no_navegador"
+        android:id="@+id/menu_contexto_lista_abrir_no_navegador"
         android:title="@string/menu_contexto_abrir_no_navegador"/>
     <item
-        android:id="@+id/menu_contexto_compartilhar"
+        android:id="@+id/menu_contexto_lista_compartilhar"
         android:title="@string/menu_contexto_compartilhar"/>
     <item
-        android:id="@+id/menu_contexto_excluir"
+        android:id="@+id/menu_contexto_lista_excluir"
         android:title="@string/menu_contexto_excluir"/>
-        
 </menu>

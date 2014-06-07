@@ -7,12 +7,14 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
+import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
@@ -71,6 +73,11 @@ public class LimparConteudoFeedTask extends AsyncTask<String, Integer, Feed> {
 		mBuilder.setProgress(0, 0, true);
         mNotifyManager.notify(id, mBuilder.build());
 		
+        DAOFeed daoFeed = new DAOFeed(context);
+        int at = daoFeed.atualizaDataPublicacao(feed);
+		Log.i("OUTPUT-TEST", "UPDATE: "+at);
+
+        
 		DAOPost daoPost = new DAOPost(context);
 		//TODO: REFAZER NO FUTURO
 		//obter todos os ids de posts
@@ -86,6 +93,7 @@ public class LimparConteudoFeedTask extends AsyncTask<String, Integer, Feed> {
 			daoConteudo.remover(post);
 			daoDescricao.remover(post);
 		}
+		DatabaseManager.getInstance().closeDatabase();
 		DatabaseManager.getInstance().closeDatabase();
 		DatabaseManager.getInstance().closeDatabase();
 		DatabaseManager.getInstance().closeDatabase();

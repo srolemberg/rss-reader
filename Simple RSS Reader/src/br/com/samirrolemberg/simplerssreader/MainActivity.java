@@ -105,16 +105,16 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_contexto_abrir_no_navegador:
+		case R.id.menu_contexto_feeds_abrir_no_navegador:
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			Uri uri = Uri.parse(feedAux.getLink());
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 			startActivity(intent);
 			break;
-		case R.id.menu_contexto_atualizar_feed:
+		case R.id.menu_contexto_feeds_atualizar_feed:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
-				//se está atualizando o feed
+				//se o mesmo feed já está atualizando está atualizando o feed
 				if (U.isConnected(MainActivity.this)) {
 					//se tem conexão de internet
 					AtualizarFeedTask task = new AtualizarFeedTask(MainActivity.this, feedAux);
@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 			}
 			break;
-		case R.id.menu_contexto_detalhes:
+		case R.id.menu_contexto_feeds_detalhes:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			LayoutInflater inflater = this.getLayoutInflater();
 			View detalhe = (new DetalhesFeedDialog(MainActivity.this, inflater.inflate(R.layout.dialog_detalhes_feed, null), feedAux)).create();
@@ -138,7 +138,7 @@ public class MainActivity extends Activity {
 			.setPositiveButton("Fechar", null)
 			.show();
 			break;
-		case R.id.menu_contexto_limpar_conteudo:
+		case R.id.menu_contexto_feeds_limpar_conteudo:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -147,18 +147,20 @@ public class MainActivity extends Activity {
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Toast.makeText(MainActivity.this, "YES!!", Toast.LENGTH_SHORT).show();		
-					
-					LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
-					String[] params = {""};
-					task.execute(params);
-
+					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
+						String[] params = {""};
+						task.execute(params);
+						carregar();//vai dar problema com muitos feeds.						
+					}else{
+						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+					}
 				}
 			})
 			.setNegativeButton("Não", null)
 			.show();
 			break;
-		case R.id.menu_contexto_excluir:
+		case R.id.menu_contexto_feeds_excluir:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -167,19 +169,22 @@ public class MainActivity extends Activity {
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Toast.makeText(MainActivity.this, "YES!!", Toast.LENGTH_SHORT).show();		
-					//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM FEED
-					//excluir(MainActivity.this, feedAux);
-					
-					//remove o feed do banco apenas
-					DAOFeed daoFeed = new DAOFeed(MainActivity.this);
-					daoFeed.remover(feedAux);
-					DatabaseManager.getInstance().closeDatabase();
-					carregar();//atualiza para o usuário
-					//remove o restante do feed em background
-					ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
-					String[] params = {""};
-					task.execute(params);
+					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+						//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM FEED
+						//excluir(MainActivity.this, feedAux);
+						
+						//remove o feed do banco apenas
+						DAOFeed daoFeed = new DAOFeed(MainActivity.this);
+						daoFeed.remover(feedAux);
+						DatabaseManager.getInstance().closeDatabase();
+						carregar();//atualiza para o usuário
+						//remove o restante do feed em background
+						ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
+						String[] params = {""};
+						task.execute(params);						
+					}else{
+						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+					}
 				}
 			})
 			.setNegativeButton("Não", null)

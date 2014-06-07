@@ -129,8 +129,6 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 	@Override
 	protected void onPostExecute(final Feed result) {
 		super.onPostExecute(result);
-		//progress.dismiss();
-		Log.i("OUTPUT-TEST", "onPostExec Say Hi!");
 		if (result!=null) {
 			daoFeed = new DAOFeed(context);
 			daoAnexo = new DAOAnexo(context);
@@ -143,7 +141,7 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 			estimativa = estimativaDosFor(result);
 			
 			//verifica se o build do feed é igual ou recente
-			if (feed.getData_publicacao().before(result.getData_publicacao())) {
+			if (feed.getData_publicacao()==null || feed.getData_publicacao().before(result.getData_publicacao())) {
 				//TODO: VERIFICAR COMO REMOVER ALGUNS DADOS QUE DEIXARAM DE VIR (COMO CATEGORIAS)
 				//se a data do ultimo build está antes da nova data
 				//atualiza os dados do feed
@@ -197,6 +195,9 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 										daoAnexo.inserir(anexo, idPost.getIdPost());
 										acessoLista.add(idPost.getIdPost());
 									}
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}									
 							}
 							if (post.getCategorias()!=null) {//se tem categorias
@@ -209,6 +210,9 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 										daoCategoria.inserir(categoria, idPost);
 										acessoLista.add(idPost.getIdPost());
 									}
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}
 								
 							}
@@ -227,6 +231,9 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 										daoConteudo.inserir(conteudo, idPost.getIdPost());
 										acessoLista.add(idPost.getIdPost());
 									}
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}
 							}
 							if (post.getDescricao()!=null) {//se tem descrição
@@ -246,6 +253,10 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 								for (Anexo anexo : post.getAnexos()) {//para cada novo anexo verifica se ele existe na base
 									daoAnexo.inserir(anexo, idPost.getIdPost());
 									acessoLista.add(idPost.getIdPost());
+									
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}									
 							}
 							if (post.getCategorias()!=null) {//se tem categorias
@@ -253,6 +264,10 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 								for (Categoria categoria : post.getCategorias()) {
 									daoCategoria.inserir(categoria, idPost);
 									acessoLista.add(idPost.getIdPost());
+									
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}
 								
 							}
@@ -261,12 +276,20 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 								for (Conteudo conteudo : post.getConteudos()) {
 									daoConteudo.inserir(conteudo, idPost.getIdPost());
 									acessoLista.add(idPost.getIdPost());
+									
+									atual++;
+							        mBuilder.setProgress(estimativa, atual, false);
+							        mNotifyManager.notify(id, mBuilder.build());
 								}
 							}
 							if (post.getDescricao()!=null) {//se tem descrição
 								Descricao descricao = post.getDescricao();//armazena descrição para acesso fácil
 								daoDescricao.inserir(descricao, idPost.getIdPost());
 								acessoLista.add(idPost.getIdPost());
+								
+								atual++;
+						        mBuilder.setProgress(estimativa, atual, false);
+						        mNotifyManager.notify(id, mBuilder.build());
 							}
 						}
 					}
@@ -300,8 +323,7 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
         mBuilder.setContentText("Feed Atualizado.");
         mNotifyManager.notify(id, mBuilder.build());
 		Executando.ATUALIZA_FEED.remove(feed.getIdFeed()+feed.getRss());
-		Log.w("OUTPUT-TEST", estimativa+" estimativa");
-		Log.w("OUTPUT-TEST", atual+" atual");
+		Toast.makeText(getContext(), feed.getTitulo()+" foi atualizado com sucesso.", Toast.LENGTH_SHORT).show();
 	}
 	protected Context getContext(){
 		return this.context;
