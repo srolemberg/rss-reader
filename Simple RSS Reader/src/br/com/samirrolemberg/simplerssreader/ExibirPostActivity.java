@@ -4,17 +4,22 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListarPostSpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
+import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesAnexosPostDialog;
 import br.com.samirrolemberg.simplerssreader.fragment.ExibirPostFragment;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
@@ -65,18 +70,6 @@ public class ExibirPostActivity extends Activity implements
 		}else{
 			actionBar.setSelectedNavigationItem(0);
 		}
-		
-		
-		
-//		// Set up the dropdown list navigation in the action bar.
-//		actionBar.setListNavigationCallbacks(
-//		// Specify a SpinnerAdapter to populate the dropdown list.
-//				new ArrayAdapter<String>(actionBar.getThemedContext(),
-//						android.R.layout.simple_list_item_1,
-//						android.R.id.text1, new String[] {
-//								getString(R.string.title_section1),
-//								getString(R.string.title_section2),
-//								getString(R.string.title_section3), }), this);
 	}
 
 	@Override
@@ -94,14 +87,6 @@ public class ExibirPostActivity extends Activity implements
 		outState.putInt(STATE_SELECTED_NAVIGATION_ITEM, getActionBar()
 				.getSelectedNavigationIndex());
 	}
-
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.exibir_post, menu);
-//		return true;
-//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,16 +127,24 @@ public class ExibirPostActivity extends Activity implements
 			//intent.putExtra("Post", postAux); - resolver esse intent se um dia precisar resetar a posição do feed que foi lido na tela anterior
 			NavUtils.navigateUpTo(this, intent);
 			break;
-//		case R.id.action_fragment_exibir_post_compartilhar:
-//		    // populate the share intent with data
-//		    Intent intent = new Intent(Intent.ACTION_SEND);
-//		    intent.setType("text/plain");
-//		    intent.putExtra(Intent.EXTRA_TEXT, "Put whatever you want");
-//			setShareIntent(intent);
-//			break;
-		case R.id.action_fragment_exibir_post_detalhes:
-			Toast.makeText(ExibirPostActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.action_fragment_exibir_post_anexos:
+			//Toast.makeText(ExibirPostActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			DAOAnexo daoAnexo = new DAOAnexo(ExibirPostActivity.this);
+			if (daoAnexo.size(postAux)>0) {
+				LayoutInflater inflater = this.getLayoutInflater();
+				View detalhe = (new DetalhesAnexosPostDialog(ExibirPostActivity.this, inflater.inflate(R.layout.dialog_anexos_post, null), postAux)).create();
+				new AlertDialog.Builder(ExibirPostActivity.this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Anexos do Post")
+				.setView(detalhe)
+				.setPositiveButton("Fechar", null)
+				.show();				
+			}else{
+				Toast.makeText(ExibirPostActivity.this, "Este post não possui anexo(s).", Toast.LENGTH_SHORT).show();
+			}
+			DatabaseManager.getInstance().closeDatabase();
 			break;
+
 		default:
 			break;
 

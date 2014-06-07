@@ -35,5 +35,5 @@
 	<string name="action_fragment_exibir_post_recarregar">Recarregar</string>
 	<string name="action_fragment_exibir_post_limpar_conteudo">Limpar Conteúdo</string>
     <string name="action_fragment_exibir_post_abrir_navegador">Abrir no Navegador</string>
-    <string name="action_fragment_exibir_post_detalhes">Detalhes</string>
+    <string name="action_fragment_exibir_post_anexos">Anexos</string>
 </resources>

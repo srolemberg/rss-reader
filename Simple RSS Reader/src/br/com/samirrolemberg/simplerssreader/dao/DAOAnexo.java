@@ -121,5 +121,25 @@ public class DAOAnexo {
 
 		return database.update(TABLE, values, "idAnexo = ?", args);
 	}
+	
+
+	public long size(Post post){
+		long resultado = 0;
+		try {
+			String[] args = {post.getIdPost()+""};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select count(idAnexo) total from "+TABLE+" where idPost = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				resultado = cursor.getLong(cursor.getColumnIndex("total"));
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+		
+		return resultado;
+	}
+
 
 }
