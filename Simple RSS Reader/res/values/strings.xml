@@ -5,8 +5,8 @@
     <string name="action_adicionar_feed">Adicionar Feed</string>
     <string name="action_atualizar_lista_feed">Atualizar Feeds</string>
     <string name="action_configurar">Configurar</string>
-	<string name="action_sobre">Sobre</string>    
-	<string name="action_ajuda">Ajuda</string>
+    <string name="action_sobre">Sobre</string>
+    <string name="action_ajuda">Ajuda</string>
     <string name="action_settings">Configurar</string>
     <string name="menu_contexto_detalhes">Detalhes</string>
     <string name="menu_contexto_abrir_no_navegador">Abrir no Navegador</string>
@@ -25,15 +25,18 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_exibir_post">Exibir Post Activity</string>
-	<string name="action_fragment_listar_post_compartilhar">Compartilhar</string>
-	<string name="action_fragment_listar_post_recarregar">Recarregar</string>
-	<string name="action_fragment_listar_post_limpar_conteudo">Limpar Conteúdo</string>
+    <string name="action_fragment_listar_post_compartilhar">Compartilhar</string>
+    <string name="action_fragment_listar_post_recarregar">Recarregar</string>
+    <string name="action_fragment_listar_post_limpar_conteudo">Limpar Conteúdo</string>
     <string name="action_fragment_listar_post_abrir_navegador">Abrir no Navegador</string>
     <string name="action_fragment_listar_post_detalhes">Detalhes</string>
-	<string name="menu_contexto_compartilhar">Compartilhar</string>
-	<string name="action_fragment_exibir_post_compartilhar">Compartilhar</string>
-	<string name="action_fragment_exibir_post_recarregar">Recarregar</string>
-	<string name="action_fragment_exibir_post_limpar_conteudo">Limpar Conteúdo</string>
+    <string name="menu_contexto_compartilhar">Compartilhar</string>
+    <string name="action_fragment_exibir_post_compartilhar">Compartilhar</string>
+    <string name="action_fragment_exibir_post_recarregar">Recarregar</string>
+    <string name="action_fragment_exibir_post_limpar_conteudo">Limpar Conteúdo</string>
     <string name="action_fragment_exibir_post_abrir_navegador">Abrir no Navegador</string>
     <string name="action_fragment_exibir_post_anexos">Anexos</string>
+    <string name="title_activity_ajuda">Ajuda Activity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>

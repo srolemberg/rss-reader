@@ -17,8 +17,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-              <service android:name="br.com.samirrolemberg.simplerssreader.service.AdicionarFeedIntentService" />
-        
+        <service android:name="br.com.samirrolemberg.simplerssreader.service.AdicionarFeedIntentService" />
+
         <activity
             android:name="br.com.samirrolemberg.simplerssreader.MainActivity"
             android:label="@string/app_name" >
@@ -52,5 +52,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.samirrolemberg.simplerssreader.ListarPostsActivity" />
         </activity>
-	</application>
+        <activity
+            android:name="br.com.samirrolemberg.simplerssreader.AjudaActivity"
+            android:label="@string/title_activity_ajuda"
+            android:parentActivityName="br.com.samirrolemberg.simplerssreader.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.samirrolemberg.simplerssreader.MainActivity" />
+        </activity>
+    </application>
+
 </manifest>

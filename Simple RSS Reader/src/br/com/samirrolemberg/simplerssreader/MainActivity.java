@@ -2,6 +2,7 @@ package br.com.samirrolemberg.simplerssreader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAO;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
@@ -205,9 +207,10 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_adicionar_feed:
+		case R.id.action_adicionar_feed:{			
 			Intent intent = new Intent(MainActivity.this, AdicionarFeedActivity.class);
 			startActivity(intent);
+		}
 			break;
 		case R.id.action_atualizar_lista_feed:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
@@ -215,11 +218,23 @@ public class MainActivity extends Activity {
 		case R.id.action_configurar:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.action_ajuda:
+		case R.id.action_ajuda:{
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(MainActivity.this, AjudaActivity.class);
+			startActivity(intent);			
+		}
 			break;
 		case R.id.action_sobre:
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			LayoutInflater inflater = this.getLayoutInflater();
+			View detalhe = (new DetalhesSobreDialog(MainActivity.this, inflater.inflate(R.layout.dialog_sobre, null))).create();
+			new AlertDialog.Builder(MainActivity.this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Sobre")
+			.setView(detalhe)
+			.setPositiveButton("Fechar", null)
+			.show();
+
 			break;
 		default:
 			break;
