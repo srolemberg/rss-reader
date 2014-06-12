@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.u.U;
 
 public class ListarPostsFragmentAdapter extends BaseAdapter{
 	final ListView listView;
@@ -44,7 +45,10 @@ public class ListarPostsFragmentAdapter extends BaseAdapter{
 		TextView autor = (TextView) v.findViewById(R.id.autor__exibir_post_fragment_list_item);
 				
 		titulo.setText(posts.get(position).getTitulo());
-		data.setText(posts.get(position).getData_publicacao().toString());
+		//CharSequence dateFormat = DateFormat.format("HH:mm:ss dd/MM/yyyy", posts.get(position).getData_publicacao());
+		//data.setText(posts.get(position).getData_publicacao().toString());
+		
+		data.setText(U.time_24_date_mask(posts.get(position).getData_publicacao(), v.getContext()));
 		autor.setText(posts.get(position).getAutor());
 		
 		return v;

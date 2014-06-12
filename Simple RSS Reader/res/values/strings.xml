@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    
+    <string name="bugsense__api_key">faa117d6</string>
     <string name="app_name">Simple RSS Reader</string>
     <string name="action_adicionar_feed">Adicionar Feed</string>
     <string name="action_atualizar_lista_feed">Atualizar Feeds</string>

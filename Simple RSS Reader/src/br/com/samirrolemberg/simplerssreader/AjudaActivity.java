@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -18,10 +20,29 @@ public class AjudaActivity extends Activity {
 	ExpandableListView listView;
 	List<String> listHeader;
 	Map<String, List<String>> listChild;
-	
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//new DAO(AjudaActivity.this);
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.startSession(AjudaActivity.this);
+	}
+	@Override
+	protected void onStop() {
+		super.onStart();
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.closeSession(AjudaActivity.this);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//new DAO(AjudaActivity.this);
+
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
+
 		setContentView(R.layout.activity_ajuda);
 		setupActionBar();
 		

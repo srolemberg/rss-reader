@@ -12,6 +12,7 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.model.Categoria;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.u.U;
 
 
 public class DetalhesPostDialog {
@@ -76,13 +77,15 @@ public class DetalhesPostDialog {
 		
 		//post.getData_atualizacao();
 		if (post.getData_atualizacao()!=null) {
-			data_atualizacao.setText(post.getData_atualizacao().toString());
+			//data_atualizacao.setText(post.getData_atualizacao().toString());
+			data_atualizacao.setText(U.date_time_24_mask(post.getData_atualizacao(), context));
 		}else{
 			data_atualizacaoLinear.setVisibility(View.GONE);
 		}
 		//post.getData_publicacao();
 		if (post.getData_publicacao()!=null) {
-			data_publicacao.setText(post.getData_publicacao().toString());
+			//data_publicacao.setText(post.getData_publicacao().toString());
+			data_publicacao.setText(U.date_time_24_mask(post.getData_publicacao(), context));
 		}else{
 			data_publicacaoLinear.setVisibility(View.GONE);
 		}

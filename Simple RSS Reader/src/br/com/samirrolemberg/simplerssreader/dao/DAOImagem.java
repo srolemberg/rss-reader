@@ -12,13 +12,13 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Imagem;
 
-public class DAOImagem {
+public class DAOImagem extends DAO{
 
 	public final static String TABLE = "imagem";
 	private SQLiteDatabase database = null;
 
 	public DAOImagem(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 	

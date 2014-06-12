@@ -12,13 +12,13 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Anexo;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOAnexo {
+public class DAOAnexo extends DAO{
 
 	public final static String TABLE = "anexo";
 	private SQLiteDatabase database = null;
 
 	public DAOAnexo(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 	

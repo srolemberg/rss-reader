@@ -12,6 +12,7 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Categoria;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+import br.com.samirrolemberg.simplerssreader.u.U;
 
 
 public class DetalhesFeedDialog {
@@ -105,19 +106,22 @@ public class DetalhesFeedDialog {
 		}
 		//feed.getData_cadastro();
 		if (feed.getData_cadastro()!=null) {
-			data_cadastro.setText(feed.getData_cadastro().toString());
+			//data_cadastro.setText(feed.getData_cadastro().toString());
+			data_cadastro.setText(U.date_time_24_mask(feed.getData_cadastro(), context));
 		}else{
 			data_cadastroLinear.setVisibility(View.GONE);
 		}
 		//feed.getData_publicacao();//colocar no layout
 		if (feed.getData_publicacao()!=null) {
-			data_publicacao.setText(feed.getData_publicacao().toString());
+			//data_publicacao.setText(feed.getData_publicacao().toString());
+			data_publicacao.setText(U.date_time_24_mask(feed.getData_publicacao(), context));
 		}else{
 			data_publicacaoLinear.setVisibility(View.GONE);
 		}
 		//feed.getData_sincronizacao();
 		if (feed.getData_sincronizacao()!=null) {
-			data_sincronizacao.setText(feed.getData_sincronizacao().toString());
+			//data_sincronizacao.setText(feed.getData_sincronizacao().toString());
+			data_sincronizacao.setText(U.date_time_24_mask(feed.getData_sincronizacao(), context));
 		}else{
 			data_sincronizacaoLinear.setVisibility(View.GONE);
 		}

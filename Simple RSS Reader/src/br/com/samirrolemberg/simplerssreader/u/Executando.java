@@ -23,6 +23,11 @@ public class Executando {
 	 * e o valor 1 é adicionado á chave como valor de execução.
 	 */
 	public final static Map<String, Integer> ATUALIZA_FEED = new HashMap<String, Integer>();
+	/**
+	 * INDICA, QUANDO NÃO ESTÁ VAZIO QUE O SERVIÇO DE ATUALIZAÇÃO DE TODOS OS FEEDS ESTÁ EM EXECUÇÃO.
+	 * NÃO DEIXAR REMOVER NEM ATUALIZAR OUTROS FEEDS ENQUANTO HOUVER ALGO AQUI.
+	 */
+	public final static Map<String, Integer> ATUALIZA_FEEDS_SERVICE = new HashMap<String, Integer>();
 	
 	private Executando(){
 		super();

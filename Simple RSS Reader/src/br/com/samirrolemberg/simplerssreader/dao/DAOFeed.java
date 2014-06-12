@@ -12,13 +12,13 @@ import android.util.Log;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 
-public class DAOFeed {
+public class DAOFeed extends DAO{
 
 	public final static String TABLE = "feed";
 	private SQLiteDatabase database = null;
 
 	public DAOFeed(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 
@@ -40,6 +40,38 @@ public class DAOFeed {
 		long id = database.insert(TABLE, null, values);
 		
 		return id;
+	}
+	
+	public Feed buscar(String rss){
+		Feed feed = null;
+		try {
+			String[] args = {rss};
+			StringBuffer sql = new StringBuffer();
+			sql.append("select * from "+TABLE+" where rss = ?");
+			Cursor cursor = database.rawQuery(sql.toString(), args);
+			if (cursor.moveToNext()) {
+				feed = new Feed.Builder()
+				.idFeed(cursor.getLong(cursor.getColumnIndex("idFeed")))
+				.autor(cursor.getString(cursor.getColumnIndex("autor")))
+				.direitoAutoral(cursor.getString(cursor.getColumnIndex("direitoAutoral")))
+				.descricao(cursor.getString(cursor.getColumnIndex("descricao")))
+				.codificacao(cursor.getString(cursor.getColumnIndex("codificacao")))
+				.tipoFeed(cursor.getString(cursor.getColumnIndex("tipoFeed")))
+				.idioma(cursor.getString(cursor.getColumnIndex("idioma")))
+				.link(cursor.getString(cursor.getColumnIndex("link")))
+				.data_publicacao(new Date(cursor.getLong(cursor.getColumnIndex("data_publicacao"))))
+				.titulo(cursor.getString(cursor.getColumnIndex("titulo")))
+				.uri(cursor.getString(cursor.getColumnIndex("uri")))
+				.data_cadastro(new Date(cursor.getLong(cursor.getColumnIndex("data_cadastro"))))
+				.data_sincronizacao(new Date(cursor.getLong(cursor.getColumnIndex("data_sincronizacao"))))
+				.rss(cursor.getString(cursor.getColumnIndex("rss")))
+				.build();
+			}
+			cursor.close();
+		} catch (Exception e) {
+			Log.i("DAOs", e.getLocalizedMessage(),e);
+		}
+		return feed;
 	}
 
 	public int atualiza(Feed feed, long idFeed){

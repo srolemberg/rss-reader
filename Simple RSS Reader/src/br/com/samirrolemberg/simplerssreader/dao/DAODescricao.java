@@ -12,13 +12,13 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Descricao;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAODescricao {
+public class DAODescricao extends DAO {
 
 	public final static String TABLE = "descricao";
 	private SQLiteDatabase database = null;
 
 	public DAODescricao(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 	

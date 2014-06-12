@@ -3,7 +3,6 @@ package br.com.samirrolemberg.simplerssreader;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +16,8 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.fragment.ListarPostsFragment;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+
+import com.bugsense.trace.BugSenseHandler;
 
 public class ListarPostsActivity extends FragmentActivity implements
 		ActionBar.OnNavigationListener {
@@ -58,10 +59,29 @@ public class ListarPostsActivity extends FragmentActivity implements
 //		listaFeeds.setAdapter(adapter);
 
 	}
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//new DAO(ListarPostsActivity.this);
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.startSession(ListarPostsActivity.this);
+	}
+	@Override
+	protected void onStop() {
+		super.onStart();
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.closeSession(ListarPostsActivity.this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//new DAO(ListarPostsActivity.this);
+
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
+		setContentView(R.layout.activity_exibir_post);
+
 		setContentView(R.layout.activity_listar_posts);
 
 		// Set up the action bar to show a dropdown list.
@@ -136,19 +156,19 @@ public class ListarPostsActivity extends FragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_fragment_listar_posts, menu);
 		
-		mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_fragment_listar_post_compartilhar).getActionProvider();
-		mShareActionProvider.setShareIntent(doShare());
+//		mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_fragment_listar_post_compartilhar).getActionProvider();
+//		mShareActionProvider.setShareIntent(doShare());
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	private Intent doShare(){
-	    Intent intent = new Intent(Intent.ACTION_SEND);
-	    intent.setType("text/plain");
-	    intent.putExtra(Intent.EXTRA_SUBJECT, feedAux.getDescricao());
-	    intent.putExtra(Intent.EXTRA_TEXT, feedAux.getLink());
-	    intent.putExtra(Intent.EXTRA_TITLE, feedAux.getTitulo());
-	    return intent;
-	}
+//	private Intent doShare(){
+//	    Intent intent = new Intent(Intent.ACTION_SEND);
+//	    intent.setType("text/plain");
+//	    intent.putExtra(Intent.EXTRA_SUBJECT, feedAux.getDescricao());
+//	    intent.putExtra(Intent.EXTRA_TEXT, feedAux.getLink());
+//	    intent.putExtra(Intent.EXTRA_TITLE, feedAux.getTitulo());
+//	    return intent;
+//	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

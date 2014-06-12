@@ -22,12 +22,33 @@ import br.com.samirrolemberg.simplerssreader.tasks.AdicionarFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.SalvarNovoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.U;
 
+import com.bugsense.trace.BugSenseHandler;
+
 public class AdicionarFeedActivity extends Activity {
 
 	private AdicionarFeedTask task = null;
 	@Override
+	protected void onStart() {
+		super.onStart();
+		//new DAO(AdicionarFeedActivity.this);
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.startSession(AdicionarFeedActivity.this);
+	}
+	@Override
+	protected void onStop() {
+		super.onStart();
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.closeSession(AdicionarFeedActivity.this);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//new DAO(AdicionarFeedActivity.this);
+
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
+
 		setContentView(R.layout.activity_adicionar_feed);
 		// Show the Up button in the action bar.
 		setupActionBar();

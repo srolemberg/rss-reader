@@ -13,13 +13,13 @@ import br.com.samirrolemberg.simplerssreader.model.Categoria;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOCategoria {
+public class DAOCategoria extends DAO{
 
 	public final static String TABLE = "categoria";
 	private SQLiteDatabase database = null;
 
 	public DAOCategoria(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 	

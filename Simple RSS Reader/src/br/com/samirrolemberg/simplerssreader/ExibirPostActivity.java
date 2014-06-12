@@ -2,6 +2,8 @@ package br.com.samirrolemberg.simplerssreader;
 
 import java.util.List;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,8 +41,26 @@ public class ExibirPostActivity extends Activity implements
 	private ShareActionProvider mShareActionProvider = null;
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+		//new DAO(ExibirPostActivity.this);
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.startSession(ExibirPostActivity.this);
+	}
+	@Override
+	protected void onStop() {
+		super.onStart();
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.closeSession(ExibirPostActivity.this);
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//new DAO(ExibirPostActivity.this);
+
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
 		setContentView(R.layout.activity_exibir_post);
 
 		// Set up the action bar to show a dropdown list.

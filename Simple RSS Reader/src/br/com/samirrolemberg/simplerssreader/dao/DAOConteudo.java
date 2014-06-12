@@ -12,13 +12,13 @@ import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.model.Conteudo;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 
-public class DAOConteudo {
+public class DAOConteudo extends DAO {
 
 	public final static String TABLE = "conteudo";
 	private SQLiteDatabase database = null;
 
 	public DAOConteudo(Context context) {
-		super();
+		super(context);
 		database = DatabaseManager.getInstance().openDatabase();
 	}
 	

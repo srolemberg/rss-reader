@@ -1,13 +1,15 @@
 package br.com.samirrolemberg.simplerssreader;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -21,16 +23,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
-import br.com.samirrolemberg.simplerssreader.dao.DAO;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+import br.com.samirrolemberg.simplerssreader.services.AtualizarTudoService;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.notification.LimparConteudoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 import br.com.samirrolemberg.simplerssreader.u.U;
+
+import com.bugsense.trace.BugSenseHandler;
 
 public class MainActivity extends Activity {
 
@@ -54,12 +58,33 @@ public class MainActivity extends Activity {
 		carregar();
 	}
 	@Override
+	protected void onStart() {
+		super.onStart();
+		//new DAO(MainActivity.this);
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.startSession(MainActivity.this);
+	}
+	@Override
+	protected void onStop() {
+		super.onStart();
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+		BugSenseHandler.closeSession(MainActivity.this);
+	}
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//new DAO(MainActivity.this);
+		//TODO NEW DAO REF.
+		//a aplicação pode ter destruido oa referência da Databasemanager.
+		//Inicia no OnCreate ou nos OnRestart. (Otimizar para controlar nulo no futuro)
+		
+		//TODO:BUGSENSE - REMOVER DEPOIS?
+	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
+		
 		setContentView(R.layout.activity_main);
 		
 		//TODO: VER SE SERÁ NECESSÁRIO COLOCAR EM TODAS AS ACTIVITYS
-		new DAO(MainActivity.this);//para inicializar a instancia do banco caso não haja. 
+		//new DAO(MainActivity.this);//para inicializar a instancia do banco caso não haja. 
 		//CRIA OU ATUALIZA O BANCO TAMBÉM
 		
 		carregar();
@@ -114,7 +139,7 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 			break;
 		case R.id.menu_contexto_feeds_atualizar_feed:
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
 				//se o mesmo feed já está atualizando está atualizando o feed
 				if (U.isConnected(MainActivity.this)) {
@@ -130,7 +155,7 @@ public class MainActivity extends Activity {
 			}
 			break;
 		case R.id.menu_contexto_feeds_detalhes:
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			LayoutInflater inflater = this.getLayoutInflater();
 			View detalhe = (new DetalhesFeedDialog(MainActivity.this, inflater.inflate(R.layout.dialog_detalhes_feed, null), feedAux)).create();
 			new AlertDialog.Builder(MainActivity.this)
@@ -141,7 +166,7 @@ public class MainActivity extends Activity {
 			.show();
 			break;
 		case R.id.menu_contexto_feeds_limpar_conteudo:
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(feedAux.getTitulo())
@@ -153,7 +178,7 @@ public class MainActivity extends Activity {
 						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
 						String[] params = {""};
 						task.execute(params);
-						carregar();//vai dar problema com muitos feeds.						
+						//carregar();//vai dar problema com muitos feeds.						
 					}else{
 						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 					}
@@ -212,11 +237,21 @@ public class MainActivity extends Activity {
 			startActivity(intent);
 		}
 			break;
-		case R.id.action_atualizar_lista_feed:
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.action_atualizar_lista_feed:{
+			DAOFeed daoFeed = new DAOFeed(MainActivity.this);
+			ArrayList<Feed> feeds = (ArrayList<Feed>) daoFeed.listarTudo();
+			//AtualizarTudoService service = new AtualizarTudoService(MainActivity.this);
+			Log.w("MY-SERVICES", "Feeds: "+feeds.size());		
+			Intent intent = new Intent(MainActivity.this, AtualizarTudoService.class);
+			intent.putExtra("Feeds", feeds);
+			//service.startService(intent);
+			DatabaseManager.getInstance().closeDatabase();
+			startService(intent);
+		}
 			break;
-		case R.id.action_configurar:
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.action_configurar:{
+			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();			
+		}
 			break;
 		case R.id.action_ajuda:{
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
@@ -224,7 +259,7 @@ public class MainActivity extends Activity {
 			startActivity(intent);			
 		}
 			break;
-		case R.id.action_sobre:
+		case R.id.action_sobre:{
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			LayoutInflater inflater = this.getLayoutInflater();
 			View detalhe = (new DetalhesSobreDialog(MainActivity.this, inflater.inflate(R.layout.dialog_sobre, null))).create();
@@ -233,44 +268,12 @@ public class MainActivity extends Activity {
 			.setTitle("Sobre")
 			.setView(detalhe)
 			.setPositiveButton("Fechar", null)
-			.show();
-
+			.show();	
+		}
 			break;
 		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-//	private void excluir(Context context, Feed feed){
-//		DAOFeed daoFeed = new DAOFeed(context);
-//		DAOPost daoPost = new DAOPost(context);
-//		DAODescricao daoDescricao = new DAODescricao(context);
-//		DAOImagem daoImagem = new DAOImagem(context);
-//		DAOAnexo daoAnexo = new DAOAnexo(context);
-//		DAOCategoria daoCategoria = new DAOCategoria(context);
-//		DAOConteudo daoConteudo = new DAOConteudo(context);
-//		
-//		List<Post> posts = daoPost.listarTudo(feed);
-//		
-//		daoFeed.remover(feed);
-//		daoCategoria.remover(feed);
-//		daoImagem.remover(feed);
-//		for (Post post : posts) {
-//			daoPost.remover(post);
-//			daoDescricao.remover(post);
-//			daoAnexo.remover(post);
-//			daoCategoria.remover(post);
-//			daoConteudo.remover(post);
-//		}
-//		
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		DatabaseManager.getInstance().closeDatabase();
-//		
-//	}
 }
