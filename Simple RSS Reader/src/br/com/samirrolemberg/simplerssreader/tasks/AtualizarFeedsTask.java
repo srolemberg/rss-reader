@@ -100,7 +100,6 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 		this.mNotifyManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mBuilder = new NotificationCompat.Builder(context)
 		.setContentTitle("Atualizando Feeds")
-		.setContentText("Sincronizando...")
 		.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 		.setOngoing(true)
 		.setSmallIcon(android.R.drawable.arrow_down_float);
@@ -109,21 +108,24 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 	protected List<Feed> doInBackground(String... arg) {
 		listaFeed = new LinkedList<Feed>();
 		daoFeed = new DAOFeed(context);
-		
+		int tamanho = arg.length;
+		int totals = 0;
 		for (String rss : arg) {//para cada rss em arg
 			//feed = daoFeed.buscar(rss);			
 			try {
 				Log.i("MY-SERVICES-RUN", "AtualizarFeedsTask - Run: "+rss);
 
 		        mBuilder.setProgress(0, 0, true);
+		        totals++;
+		        mBuilder.setContentText(totals+"/"+tamanho+" Sincronizando de: "+rss);
 		        mNotifyManager.notify(id, mBuilder.build());
 				URL feedUrl = new URL(rss);
 				SyndFeedInput input = new SyndFeedInput();
 				this.syndFeed = input.build(new InputStreamReader(feedUrl.openStream()));
 				//if (feed != null) {
-			        mBuilder.setProgress(0, 0, false);
-			        mBuilder.setContentText("Verificando Entradas Antigas.");
-			        mNotifyManager.notify(id, mBuilder.build());
+			        //mBuilder.setProgress(0, 0, true);
+			        //mBuilder.setContentText("Verificando Entradas Antigas.");
+			        //mNotifyManager.notify(id, mBuilder.build());
 			        listaFeed.add(SimpleFeed.consumir(syndFeed, rss));
 					Log.i("MY-SERVICES-RUN", "AtualizarFeedsTask - OK: "+rss);
 				//}
@@ -333,9 +335,16 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 	@Override
 	protected void onPostExecute(final List<Feed> lists) {
 		super.onPostExecute(lists);
+		int tamanhos = lists.size();
+		int totals = 0;
 		for (Feed result : lists) {
 			Log.d("MY-SERVICES-RUN", "AtualizarFeedsTask - Save: "+result.getTitulo());
 			if (result!=null) {
+		        mBuilder.setProgress(0, 0, false);
+		        totals++;
+		        mBuilder.setContentText(totals+"/"+tamanhos+" Atualizando: "+result.getRss());
+		        mNotifyManager.notify(id, mBuilder.build());
+				
 				daoFeed = new DAOFeed(context);
 					feed = daoFeed.buscar(result.getRss());
 				daoAnexo = new DAOAnexo(context);
@@ -345,6 +354,7 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 				daoImagem = new DAOImagem(context);
 				daoPost = new DAOPost(context);
 				
+				atual = 0;
 				estimativa = estimativaDosFor(result);
 
 				//verifica se o build do feed é igual ou recente
@@ -365,11 +375,14 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 			}
 
 	        mBuilder.setProgress(0, 0, false);
-	        mBuilder.setOngoing(false);
-	        mBuilder.setContentText(feed.getTitulo()+" Atualizado.");
+	        mBuilder.setContentText(feed.getRss()+" Atualizado.");
 	        mNotifyManager.notify(id, mBuilder.build());
 			Executando.ATUALIZA_FEEDS_SERVICE.remove(feed.getIdFeed()+feed.getRss());
 		}
+        mBuilder.setProgress(0, 0, false);
+        mBuilder.setOngoing(false);
+        mBuilder.setContentText("Feeds Atualizados.");
+        mNotifyManager.notify(id, mBuilder.build());
 		if (service!=null) {
 			Log.i("MY-SERVICES", "AtualizarFeedsTask - TRY STOP");
 			this.cancel(false);
