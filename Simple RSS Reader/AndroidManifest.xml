@@ -26,6 +26,10 @@
             android:name="br.com.samirrolemberg.simplerssreader.services.SalvarFeedService"
             android:exported="false"
             />
+        <service 
+            android:name="br.com.samirrolemberg.simplerssreader.services.LimparConteudoService"
+            android:exported="false"
+            />
         
         <activity
             android:name="br.com.samirrolemberg.simplerssreader.MainActivity"

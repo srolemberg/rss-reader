@@ -28,9 +28,9 @@ import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService;
+import br.com.samirrolemberg.simplerssreader.services.LimparConteudoService;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
 import br.com.samirrolemberg.simplerssreader.tasks.ExcluirFeedTask;
-import br.com.samirrolemberg.simplerssreader.tasks.LimparConteudoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 import br.com.samirrolemberg.simplerssreader.u.U;
 
@@ -175,9 +175,13 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
-						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
-						String[] params = {""};
-						task.execute(params);
+						Intent intent = new Intent(MainActivity.this, LimparConteudoService.class);
+						intent.putExtra("Feed", feedAux);
+						//service.startService(intent);
+						startService(intent);
+//						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
+//						String[] params = {""};
+//						task.execute(params);
 						//carregar();//vai dar problema com muitos feeds.						
 					}else{
 						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
