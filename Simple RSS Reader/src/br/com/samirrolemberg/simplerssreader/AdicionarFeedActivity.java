@@ -33,7 +33,6 @@ public class AdicionarFeedActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		//new DAO(AdicionarFeedActivity.this);
 		//TODO:BUGSENSE - REMOVER DEPOIS?
 		BugSenseHandler.startSession(AdicionarFeedActivity.this);
 	}
