@@ -30,7 +30,7 @@ import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Imagem;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 import br.com.samirrolemberg.simplerssreader.model.SimpleFeed;
-import br.com.samirrolemberg.simplerssreader.services.AtualizarTudoService;
+import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
@@ -63,7 +63,7 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 	private NotificationManager mNotifyManager = null;
 	private NotificationCompat.Builder mBuilder = null;
 	
-	private AtualizarTudoService service = null;
+	private AtualizarFeedsService service = null;
 	
 	private Object resultado;
 	/**
@@ -73,20 +73,20 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 	public Object getResultado() {return resultado;}
 	public void setResultado(Object resultado) {this.resultado = resultado;}
 
-	public AtualizarFeedsTask(Context context) {
-		super();
-		this.context = context;
-		this.id = 15;//colocar parametero
-		Log.d("MY-SERVICES-RUN", "AtualizarFeedsTask - Open");
-	}
-	public AtualizarFeedsTask(Context context, AtualizarTudoService service) {
-		super();
-		this.context = context;
-		this.id = 15;//colocar parametero
-		this.service = service;
-		Log.d("MY-SERVICES-RUN", "AtualizarFeedsTask - Open");
-	}
-	public AtualizarFeedsTask(Context context, AtualizarTudoService service, Intent intent) {
+//	public AtualizarFeedsTask(Context context) {
+//		super();
+//		this.context = context;
+//		this.id = 15;//colocar parametero
+//		Log.d("MY-SERVICES-RUN", "AtualizarFeedsTask - Open");
+//	}
+//	public AtualizarFeedsTask(Context context, AtualizarFeedsService service) {
+//		super();
+//		this.context = context;
+//		this.id = 15;//colocar parametero
+//		this.service = service;
+//		Log.d("MY-SERVICES-RUN", "AtualizarFeedsTask - Open");
+//	}
+	public AtualizarFeedsTask(Context context, AtualizarFeedsService service, Intent intent) {
 		super();
 		this.context = context;
 		this.id = 15;//colocar parametero

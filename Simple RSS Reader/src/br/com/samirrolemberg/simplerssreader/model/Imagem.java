@@ -1,9 +1,13 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
+import java.io.Serializable;
 
 
 
-public class Imagem {
+
+public class Imagem implements Serializable{
+
+	private static final long serialVersionUID = -4193376955071684929L;
 
 	private final long idImagem;
 	private final String descricao;
@@ -43,6 +47,9 @@ public class Imagem {
 		url = builder.url;
 		feed = builder.feed;
 		acesso = builder.acesso;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public long getIdImagem() {
 		return idImagem;

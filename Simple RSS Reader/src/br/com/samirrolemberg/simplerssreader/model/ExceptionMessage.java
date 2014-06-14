@@ -1,6 +1,10 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
-public class ExceptionMessage {
+import java.io.Serializable;
+
+public class ExceptionMessage implements Serializable{
+
+	private static final long serialVersionUID = -9048279257449943887L;
 
 	private Throwable throwable;
 	

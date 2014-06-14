@@ -27,10 +27,10 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
-import br.com.samirrolemberg.simplerssreader.services.AtualizarTudoService;
+import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
-import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirFeedTask;
-import br.com.samirrolemberg.simplerssreader.tasks.notification.LimparConteudoFeedTask;
+import br.com.samirrolemberg.simplerssreader.tasks.ExcluirFeedTask;
+import br.com.samirrolemberg.simplerssreader.tasks.LimparConteudoFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 import br.com.samirrolemberg.simplerssreader.u.U;
 
@@ -241,8 +241,8 @@ public class MainActivity extends Activity {
 			DAOFeed daoFeed = new DAOFeed(MainActivity.this);
 			ArrayList<Feed> feeds = (ArrayList<Feed>) daoFeed.listarTudo();
 			//AtualizarTudoService service = new AtualizarTudoService(MainActivity.this);
-			Log.w("MY-SERVICES", "Feeds: "+feeds.size());		
-			Intent intent = new Intent(MainActivity.this, AtualizarTudoService.class);
+			Log.w("MY-SERVICES", "Feeds: "+feeds.size());
+			Intent intent = new Intent(MainActivity.this, AtualizarFeedsService.class);
 			intent.putExtra("Feeds", feeds);
 			//service.startService(intent);
 			DatabaseManager.getInstance().closeDatabase();

@@ -11,7 +11,7 @@ import android.util.Log;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedsTask;
 
-public class AtualizarTudoService extends Service {
+public class AtualizarFeedsService extends Service {
 
 	//private NotificationManager mNotifyManager = null;
 	//private NotificationCompat.Builder mBuilder = null;
@@ -23,7 +23,7 @@ public class AtualizarTudoService extends Service {
 	
 	//AQUI ELE INICIA UMA THREAD E ENFILEIRA ELA POR CHAMADA.
 	//É INTERESSANTE NÃO 
-	public AtualizarTudoService() {
+	public AtualizarFeedsService() {
 		super();
 		this.context = this;
 		//this.id = new Random().nextInt(999);//colocar parametero

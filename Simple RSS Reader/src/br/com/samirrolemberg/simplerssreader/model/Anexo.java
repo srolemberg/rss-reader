@@ -1,8 +1,12 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
+import java.io.Serializable;
 
 
-public class Anexo {
+
+public class Anexo implements Serializable{
+
+	private static final long serialVersionUID = 1218675634215027870L;
 
 	private final long idAnexo;
 	private final long tamanho;
@@ -39,6 +43,9 @@ public class Anexo {
 		url = builder.url;
 		post = builder.post;
 		acesso = builder.acesso;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public long getIdAnexo() {
 		return idAnexo;

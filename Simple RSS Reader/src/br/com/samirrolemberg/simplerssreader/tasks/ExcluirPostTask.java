@@ -1,4 +1,4 @@
-package br.com.samirrolemberg.simplerssreader.tasks.notification;
+package br.com.samirrolemberg.simplerssreader.tasks;
 
 import java.util.Random;
 

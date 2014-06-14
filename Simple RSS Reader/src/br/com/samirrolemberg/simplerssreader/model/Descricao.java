@@ -1,8 +1,12 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
+import java.io.Serializable;
 
 
-public class Descricao {
+
+public class Descricao implements Serializable {
+
+	private static final long serialVersionUID = 1938406296895480420L;
 
 	private final long idDescricao;
 	private final String modo;
@@ -38,6 +42,9 @@ public class Descricao {
 		valor = builder.valor;
 		post = builder.post;
 		acesso = builder.acesso;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public long getIdDescricao() {
 		return idDescricao;

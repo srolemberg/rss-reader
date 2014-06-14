@@ -30,7 +30,7 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPostDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
-import br.com.samirrolemberg.simplerssreader.tasks.notification.ExcluirPostTask;
+import br.com.samirrolemberg.simplerssreader.tasks.ExcluirPostTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class ListarPostsFragment extends Fragment{

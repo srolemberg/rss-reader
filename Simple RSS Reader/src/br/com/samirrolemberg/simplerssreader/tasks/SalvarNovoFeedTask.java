@@ -1,11 +1,11 @@
-package br.com.samirrolemberg.simplerssreader.tasks.notification;
+package br.com.samirrolemberg.simplerssreader.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -20,6 +20,7 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOImagem;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.services.SalvarFeedService;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
@@ -33,7 +34,9 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 	private long idFeed = 0;
 	private List<Long> idsPost = null;
 	private int atual = 0;
-
+	private SalvarFeedService service;
+	private Intent intent;
+	
 	private DAOFeed daoFeed = null;
 	private DAOPost daoPost = null;
 	private DAODescricao daoDescricao = null;
@@ -43,11 +46,29 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 	private DAOImagem daoImagem = null;
 
 	//TODO: POR ALGUM MOTIVO, DEPOIS DA ATUALIZAÇÃO DO ACESSO, UM DOS VALORES DO PROGRESSO ESTÁ MENOR.
-	public SalvarNovoFeedTask(Context context, Feed feed, long idFeed){
+//	public SalvarNovoFeedTask(Context context, Feed feed, long idFeed){
+//		this.context = context;
+//		this.id = new Random().nextInt(999);//colocar parametero
+//		this.feed = feed;
+//		this.idFeed = idFeed;
+//	}
+//	public SalvarNovoFeedTask(Context context, SalvarFeedService service, Intent intent) {
+//		super();
+//		this.context = context;
+//		this.id = 15;//colocar parametero
+//		this.service = service;
+//		this.intent = intent;
+//		Log.d("MY-SERVICES-RUN", "SalvarNovoFeedTask - Open");
+//	}
+	public SalvarNovoFeedTask(Context context, SalvarFeedService service, Intent intent, Feed feed, long idFeed) {
+		super();
 		this.context = context;
-		this.id = new Random().nextInt(999);//colocar parametero
+		this.id = 15;//colocar parametero
+		this.service = service;
+		this.intent = intent;
 		this.feed = feed;
 		this.idFeed = idFeed;
+		Log.d("MY-SERVICES-RUN", "SalvarNovoFeedTask - Open");
 	}
 
 	@Override
@@ -57,6 +78,7 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		mBuilder = new NotificationCompat.Builder(context)
 		.setContentTitle("Adicionando "+feed.getTitulo())
 		.setContentText("Adicionando novos registros.")
+		.setOngoing(true)
 		.setSmallIcon(android.R.drawable.arrow_down_float);
 		estimativa = estimativaDosFor()*2;
 		Executando.ADICIONAR_FEED.put(idFeed+feed.getRss(), 1);
@@ -66,8 +88,7 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		addFeed();
 		// When the loop is finished, updates the notification
         mBuilder.setContentText("Novo Feed adicionado.")
-        // Removes the progress bar
-                .setProgress(0,0,false);
+        .setProgress(0,0,false);
         mNotifyManager.notify(id, mBuilder.build());
 
 		return null;
@@ -79,7 +100,16 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 		Executando.ADICIONAR_FEED.remove(idFeed+feed.getRss());
 		Log.w("OUTPUT-TEST", estimativa+" estimativa");
 		Log.w("OUTPUT-TEST", atual+" atual");
+        mBuilder.setProgress(0,0,false)
+        .setOngoing(false);
+        mNotifyManager.notify(id, mBuilder.build());
 		Toast.makeText(getContext(), feed.getTitulo()+" foi adicionado com sucesso.", Toast.LENGTH_SHORT).show();
+		if (service!=null) {
+			Log.i("MY-SERVICES", "SalvarFeedsTask - TRY STOP");
+			this.cancel(false);
+			service.stopService(intent);
+		}
+
 	}
 
 	protected Context getContext(){

@@ -1,8 +1,12 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
+import java.io.Serializable;
 
 
-public class Categoria {
+
+public class Categoria implements Serializable{
+
+	private static final long serialVersionUID = 6532019828485474770L;
 
 	private final long idCategoria;
 	private final String nome;
@@ -41,6 +45,9 @@ public class Categoria {
 		feed = builder.feed;
 		post = builder.post;
 		acesso = builder.acesso;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public long getIdCategoria() {

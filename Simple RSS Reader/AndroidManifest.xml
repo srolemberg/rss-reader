@@ -19,7 +19,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <service 
-            android:name="br.com.samirrolemberg.simplerssreader.services.AtualizarTudoService"
+            android:name="br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService"
+            android:exported="false"
+            />
+        <service 
+            android:name="br.com.samirrolemberg.simplerssreader.services.SalvarFeedService"
             android:exported="false"
             />
         

@@ -1,9 +1,8 @@
 package br.com.samirrolemberg.simplerssreader.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.util.Log;
 
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndCategoryImpl;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndContentImpl;
@@ -12,8 +11,10 @@ import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.Syn
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndImageImpl;
 
-public class SimpleFeed {
+public class SimpleFeed implements Serializable {
 	
+	private static final long serialVersionUID = 8848081141427890290L;
+
 	public static Feed consumir(SyndFeed rome, String rss){
 		List<Categoria> categorias = null;
 		if (rome.getCategories()!=null) {
@@ -172,4 +173,8 @@ public class SimpleFeed {
 		.build();
 		return feed;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 }
