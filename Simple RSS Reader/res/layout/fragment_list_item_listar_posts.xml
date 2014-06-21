@@ -8,18 +8,21 @@
         android:id="@+id/titulo__exibir_post_fragment_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Titulo" />
+        android:text="Titulo"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/autor__exibir_post_fragment_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Autor" />
+        android:text="Autor"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/data__exibir_post_fragment_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data" />
+        android:text="Data"
+        android:textSize="12sp" />
 
 </LinearLayout>

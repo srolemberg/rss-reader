@@ -110,9 +110,9 @@ public class DAOImagem extends DAO{
 		//select idAnexo id from anexo where idPost = ? and url = ?
 		long retorno = 0;
 		try {
-			String[] args = {feed.getIdFeed()+"",feed.getUri()};//TODO VER NO BANCO SE PRECISA MUDAR DE URI PARA URL
+			String[] args = {feed.getIdFeed()+"",imagem.getUrl()};//TODO VER NO BANCO SE PRECISA MUDAR DE URI PARA URL
 			StringBuffer sql = new StringBuffer();
-			sql.append("select idCategoria id from "+TABLE+" where idFeed = ? and url = ?");
+			sql.append("select idImagem id from "+TABLE+" where idFeed = ? and url = ?");
 			Cursor cursor = database.rawQuery(sql.toString(), args);
 			if (cursor.moveToNext()) {
 				retorno = cursor.getLong(cursor.getColumnIndex("id"));
