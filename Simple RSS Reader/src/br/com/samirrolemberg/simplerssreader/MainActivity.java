@@ -28,9 +28,9 @@ import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService;
+import br.com.samirrolemberg.simplerssreader.services.ExcluirFeedService;
 import br.com.samirrolemberg.simplerssreader.services.LimparConteudoService;
 import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
-import br.com.samirrolemberg.simplerssreader.tasks.ExcluirFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 import br.com.samirrolemberg.simplerssreader.u.U;
 
@@ -174,18 +174,26 @@ public class MainActivity extends Activity {
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+					if (!U.isMyServiceRunning(LimparConteudoService.class, MainActivity.this)) {//se o serviço não está rodando...
 						Intent intent = new Intent(MainActivity.this, LimparConteudoService.class);
 						intent.putExtra("Feed", feedAux);
-						//service.startService(intent);
 						startService(intent);
-//						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
-//						String[] params = {""};
-//						task.execute(params);
-						//carregar();//vai dar problema com muitos feeds.						
 					}else{
 						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 					}
+
+//					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
+//						Intent intent = new Intent(MainActivity.this, LimparConteudoService.class);
+//						intent.putExtra("Feed", feedAux);
+//						//service.startService(intent);
+//						startService(intent);
+////						LimparConteudoFeedTask task = new LimparConteudoFeedTask(MainActivity.this, feedAux);
+////						String[] params = {""};
+////						task.execute(params);
+//						//carregar();//vai dar problema com muitos feeds.						
+//					}else{
+//						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+//					}
 				}
 			})
 			.setNegativeButton("Não", null)
@@ -209,10 +217,16 @@ public class MainActivity extends Activity {
 						daoFeed.remover(feedAux);
 						DatabaseManager.getInstance().closeDatabase();
 						carregar();//atualiza para o usuário
-						//remove o restante do feed em background
-						ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
-						String[] params = {""};
-						task.execute(params);						
+						
+						//remove o restante no serviço
+						Intent intent = new Intent(MainActivity.this, ExcluirFeedService.class);
+						intent.putExtra("Feed", feedAux);
+						startService(intent);
+
+//						//remove o restante do feed em background
+//						ExcluirFeedTask task = new ExcluirFeedTask(MainActivity.this, feedAux);
+//						String[] params = {""};
+//						task.execute(params);						
 					}else{
 						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 					}

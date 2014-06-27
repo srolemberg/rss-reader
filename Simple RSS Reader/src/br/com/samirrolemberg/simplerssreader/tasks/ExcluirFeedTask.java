@@ -1,10 +1,10 @@
 package br.com.samirrolemberg.simplerssreader.tasks;
 
 import java.util.List;
-import java.util.Random;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -17,6 +17,7 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOImagem;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.services.ExcluirFeedService;
 
 public class ExcluirFeedTask extends AsyncTask<String, Integer, Feed> {
 
@@ -27,11 +28,21 @@ public class ExcluirFeedTask extends AsyncTask<String, Integer, Feed> {
 	private Feed feed = null;
 	private int estimativa = 0;
 	//private int atual = 0;
+	private ExcluirFeedService service;
+	private Intent intent;
 	
-	public ExcluirFeedTask(Context context, Feed feed){
+//	public ExcluirFeedTask(Context context, Feed feed){
+//		this.context = context;
+//		this.id = new Random().nextInt(999);//colocar parametero
+//		this.feed = feed;
+//	}
+
+	public ExcluirFeedTask(Context context, ExcluirFeedService service, Intent intent, Feed feed){
 		this.context = context;
-		this.id = new Random().nextInt(999);//colocar parametero
+		this.id = 45;//colocar parametero
 		this.feed = feed;
+		this.service = service;
+		this.intent = intent;
 	}
 
 	@Override
@@ -57,6 +68,15 @@ public class ExcluirFeedTask extends AsyncTask<String, Integer, Feed> {
         mNotifyManager.notify(id, mBuilder.build());
 
 		return null;
+	}
+	@Override
+	protected void onPostExecute(Feed result) {
+		super.onPostExecute(result);
+		if (service!=null) {
+			Log.i("MY-SERVICES", "EscluirFeedTask - TRY STOP");
+			this.cancel(false);
+			service.stopService(intent);
+		}
 	}
 	protected Context getContext(){
 		return this.context;
