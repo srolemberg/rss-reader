@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,22 +73,27 @@ public class ExibirPostFragment extends Fragment {
 		
 		if (daoConteudo.size(postAux)>0) {//se o conteudo total não é nulo
 			String data = conteudosFrag.get(0).getValor();
-			String mimeType = conteudosFrag.get(0).getTipo();
+			//String mimeType = conteudosFrag.get(0).getTipo();
+			String mimeType = "text/html";
 			navegador.getSettings().setBlockNetworkLoads(true);
 			//navegador.getSettings().setJavaScriptEnabled(true);
 			//navegador.loadData(data, "text/"+mimeType+"; charset=UTF-8",null);
-			navegador.loadData(data, "text/"+mimeType+"; charset=UTF-8",null);
+			//navegador.loadData(data, "text/"+mimeType+"; charset=UTF-8",null);
+			navegador.loadData(data, mimeType+"; charset=UTF-8",null);
 			//navegador.setText(Integer.toString(getArguments().getInt(ARG_POST_CONTENT)));
-			
+			Log.w("MAVEGADOR", "daoConteudo");
+			Log.d("MAVEGADOR", data);
 		}else if (daoDescricao.size(postAux)>0){//se a não há conteudo mas há descrição
 			String data = descricoesFrag.get(0).getValor();
-			String mimeType = descricoesFrag.get(0).getTipo();
+			//String mimeType = descricoesFrag.get(0).getTipo();
+			String mimeType = "text/html";
 			navegador.getSettings().setBlockNetworkLoads(true);
 			//navegador.getSettings().setJavaScriptEnabled(true);
 			//navegador.loadData(data, "text/"+mimeType+"; charset=UTF-8",null);
 			navegador.loadData(data, mimeType+"; charset=UTF-8",null);
 			//navegador.setText(Integer.toString(getArguments().getInt(ARG_POST_CONTENT)));
-
+			Log.w("MAVEGADOR", "daoDescricao");
+			Log.d("MAVEGADOR", data);
 		}
 		DatabaseManager.getInstance().closeDatabase();
 		DatabaseManager.getInstance().closeDatabase();
