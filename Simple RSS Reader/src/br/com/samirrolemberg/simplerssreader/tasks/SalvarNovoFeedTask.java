@@ -63,7 +63,7 @@ public class SalvarNovoFeedTask extends AsyncTask<String, Integer, Feed> {
 	public SalvarNovoFeedTask(Context context, SalvarFeedService service, Intent intent, Feed feed, long idFeed) {
 		super();
 		this.context = context;
-		this.id = 15;//colocar parametero
+		this.id = 90;//colocar parametero
 		this.service = service;
 		this.intent = intent;
 		this.feed = feed;

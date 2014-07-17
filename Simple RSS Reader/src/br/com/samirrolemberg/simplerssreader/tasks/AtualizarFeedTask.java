@@ -5,10 +5,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.Random;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -30,6 +30,7 @@ import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Imagem;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 import br.com.samirrolemberg.simplerssreader.model.SimpleFeed;
+import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedService;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 
 import com.google.code.rome.android.repackaged.com.sun.syndication.feed.synd.SyndFeed;
@@ -61,13 +62,21 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 	private DAOImagem daoImagem = null;
 	private DAOPost daoPost = null;
 
+	private AtualizarFeedService service = null;
+	private Intent intent = null;
 
-	public AtualizarFeedTask(Context context, Feed feed){
+//	public AtualizarFeedTask(Context context, Feed feed){
+//		this.context = context;
+//		this.id = new Random().nextInt(999);//colocar parametero
+//		this.feed = feed;
+//	}
+	public AtualizarFeedTask(Context context, AtualizarFeedService service, Intent intent, Feed feed){
 		this.context = context;
-		this.id = new Random().nextInt(999);//colocar parametero
+		this.id = 30;//colocar parametero
 		this.feed = feed;
+		this.service = service;
+		this.intent = intent;
 	}
-	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -332,7 +341,11 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
         mBuilder.setOngoing(false);
         mBuilder.setContentText("Feed Atualizado.");
         mNotifyManager.notify(id, mBuilder.build());
-		Executando.ATUALIZA_FEED.remove(feed.getIdFeed()+feed.getRss());
+		if (service!=null) {
+			Log.i("MY-SERVICES", "AtualizarFeedsTask - TRY STOP");
+			this.cancel(false);
+			service.stopService(intent);
+		}
 	}
 	protected Context getContext(){
 		return this.context;

@@ -36,7 +36,7 @@ public class LimparConteudoFeedTask extends AsyncTask<String, Integer, Feed> {
 	
 	public LimparConteudoFeedTask(Context context, Feed feed){
 		this.context = context;
-		this.id = 45;//colocar parametero
+		this.id = 75;//colocar parametero
 		this.feed = feed;
 	}
 	public LimparConteudoFeedTask(Context context, LimparConteudoService service, Intent intent, Feed feed){

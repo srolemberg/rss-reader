@@ -7,7 +7,6 @@ import android.os.IBinder;
 import android.util.Log;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.tasks.ExcluirFeedTask;
-import br.com.samirrolemberg.simplerssreader.tasks.LimparConteudoFeedTask;
 
 public class ExcluirFeedService extends Service {
 

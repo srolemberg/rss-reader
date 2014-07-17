@@ -1,7 +1,5 @@
 package br.com.samirrolemberg.simplerssreader.tasks;
 
-import java.util.Random;
-
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -24,7 +22,7 @@ public class ExcluirPostTask extends AsyncTask<String, Integer, Feed> {
 	
 	public ExcluirPostTask(Context context, Post post){
 		this.context = context;
-		this.id = new Random().nextInt(999);//colocar parametero
+		this.id = 60;//colocar parametero
 		this.post = post;
 	}
 

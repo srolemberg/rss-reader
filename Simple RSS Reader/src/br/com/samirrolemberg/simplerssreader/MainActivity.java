@@ -27,10 +27,10 @@ import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
+import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedService;
 import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedsService;
 import br.com.samirrolemberg.simplerssreader.services.ExcluirFeedService;
 import br.com.samirrolemberg.simplerssreader.services.LimparConteudoService;
-import br.com.samirrolemberg.simplerssreader.tasks.AtualizarFeedTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
 import br.com.samirrolemberg.simplerssreader.u.U;
 
@@ -132,29 +132,28 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_contexto_feeds_abrir_no_navegador:
+		case R.id.menu_contexto_feeds_abrir_no_navegador:{
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			Uri uri = Uri.parse(feedAux.getLink());
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(intent);
+			startActivity(intent);			
+		}
 			break;
-		case R.id.menu_contexto_feeds_atualizar_feed:
-			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
-				//se o mesmo feed já está atualizando está atualizando o feed
-				if (U.isConnected(MainActivity.this)) {
-					//se tem conexão de internet
-					AtualizarFeedTask task = new AtualizarFeedTask(MainActivity.this, feedAux);
-					String[] params = {feedAux.getRss().toString()};
-					task.execute(params);
+		case R.id.menu_contexto_feeds_atualizar_feed:{
+			if (U.isConnected(MainActivity.this)) {
+				if (!U.isMyServiceRunning(AtualizarFeedService.class, MainActivity.this)) {//se o serviço não está rodando...
+					Intent intent = new Intent(MainActivity.this, AtualizarFeedService.class);
+					intent.putExtra("Feed", feedAux);
+					startService(intent);
 				}else{
-					Toast.makeText(MainActivity.this, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
-				}
+					Toast.makeText(MainActivity.this, "Já existe uma atualização em andamento. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+				}					
 			}else{
-				Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
 			}
+		}
 			break;
-		case R.id.menu_contexto_feeds_detalhes:
+		case R.id.menu_contexto_feeds_detalhes:{
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			LayoutInflater inflater = this.getLayoutInflater();
 			View detalhe = (new DetalhesFeedDialog(MainActivity.this, inflater.inflate(R.layout.dialog_detalhes_feed, null), feedAux)).create();
@@ -163,9 +162,10 @@ public class MainActivity extends Activity {
 			.setTitle("Detalhes do Feed")
 			.setView(detalhe)
 			.setPositiveButton("Fechar", null)
-			.show();
+			.show();			
+		}
 			break;
-		case R.id.menu_contexto_feeds_limpar_conteudo:
+		case R.id.menu_contexto_feeds_limpar_conteudo:{
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -198,8 +198,9 @@ public class MainActivity extends Activity {
 			})
 			.setNegativeButton("Não", null)
 			.show();
+		}
 			break;
-		case R.id.menu_contexto_feeds_excluir:
+		case R.id.menu_contexto_feeds_excluir:{
 			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -234,6 +235,7 @@ public class MainActivity extends Activity {
 			})
 			.setNegativeButton("Não", null)
 			.show();
+		}
 			break;
 		default:
 			Toast.makeText(MainActivity.this, "Dismiss", Toast.LENGTH_SHORT).show();
@@ -290,6 +292,7 @@ public class MainActivity extends Activity {
 		}
 			break;
 		default:
+			Toast.makeText(MainActivity.this, "Dismiss", Toast.LENGTH_SHORT).show();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

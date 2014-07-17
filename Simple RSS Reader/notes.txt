@@ -22,3 +22,8 @@ estudar o rss da nintendo jp que nao possui conteudo e nem descricao e o do poly
 ver o conteudo da nintendo america que está coma codificação dos post diferente de utf8
 
 ver como trocar o modo dos isos no android nos componentes
+
+
+
+a atualização separada foi feita, mas quando tento verificar se ela está rodando, o sistema trava.
+verificar
