@@ -21,7 +21,6 @@ public class AtualizarFeedService extends Service {
 	
 	//AQUI ELE INICIA UMA THREAD E ENFILEIRA ELA POR CHAMADA.
 	//É INTERESSANTE NÃO 
-	
 	public AtualizarFeedService() {
 		super();
 		this.context = this;

@@ -2,12 +2,12 @@
 
     <item
         android:id="@+id/action_adicionar_feed"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/rss_ic_adicionar_feed"
         android:showAsAction="always"
         android:title="@string/action_adicionar_feed"/>
     <item
         android:id="@+id/action_atualizar_lista_feed"
-        android:icon="@android:drawable/ic_menu_rotate"
+        android:icon="@drawable/rss_ic_atualizar_feeds"
         android:showAsAction="collapseActionView"
         android:title="@string/action_atualizar_lista_feed"/>
     <item
