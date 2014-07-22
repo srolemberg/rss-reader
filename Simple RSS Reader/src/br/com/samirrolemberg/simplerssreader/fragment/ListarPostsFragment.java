@@ -32,6 +32,7 @@ import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
 import br.com.samirrolemberg.simplerssreader.tasks.ExcluirPostTask;
 import br.com.samirrolemberg.simplerssreader.u.Executando;
+import br.com.samirrolemberg.simplerssreader.u.U;
 
 public class ListarPostsFragment extends Fragment{
 
@@ -151,9 +152,13 @@ public class ListarPostsFragment extends Fragment{
 		switch (item.getItemId()) {
 		case R.id.menu_contexto_lista_abrir_no_navegador:
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			Uri uri = Uri.parse(postAux.getLink());
-			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(intent);
+			if (U.isConnected(getActivity())) {
+				Uri uri = Uri.parse(postAux.getLink());
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(intent);				
+			}else{
+				Toast.makeText(getActivity(), "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
+			}
 			break;
 		case R.id.menu_contexto_lista_detalhes:
 			//Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
@@ -208,8 +213,12 @@ public class ListarPostsFragment extends Fragment{
 			.show();
 			break;
 		case R.id.menu_contexto_lista_compartilhar:
-			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			startActivity(doSharePost());
+			if (U.isConnected(getActivity())) {
+				Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+				startActivity(doSharePost());				
+			}else{
+				Toast.makeText(getActivity(), "Não há conexão de internet.", Toast.LENGTH_SHORT).show();
+			}
 			break;
 			
 		default:

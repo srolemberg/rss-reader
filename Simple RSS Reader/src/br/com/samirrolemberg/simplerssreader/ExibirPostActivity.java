@@ -2,12 +2,11 @@ package br.com.samirrolemberg.simplerssreader;
 
 import java.util.List;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
@@ -25,6 +24,9 @@ import br.com.samirrolemberg.simplerssreader.dialog.DetalhesAnexosPostDialog;
 import br.com.samirrolemberg.simplerssreader.fragment.ExibirPostFragment;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
+import br.com.samirrolemberg.simplerssreader.u.U;
+
+import com.bugsense.trace.BugSenseHandler;
 
 public class ExibirPostActivity extends Activity implements
 		ActionBar.OnNavigationListener {
@@ -129,7 +131,7 @@ public class ExibirPostActivity extends Activity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
+		case android.R.id.home:{			
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
 			// to navigate up one level in the application structure. For
@@ -146,8 +148,9 @@ public class ExibirPostActivity extends Activity implements
 			intent.putExtra("Feed", feedAux);
 			//intent.putExtra("Post", postAux); - resolver esse intent se um dia precisar resetar a posição do feed que foi lido na tela anterior
 			NavUtils.navigateUpTo(this, intent);
+		}
 			break;
-		case R.id.action_fragment_exibir_post_anexos:
+		case R.id.action_fragment_exibir_post_anexos:{
 			//Toast.makeText(ExibirPostActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 			DAOAnexo daoAnexo = new DAOAnexo(ExibirPostActivity.this);
 			if (daoAnexo.size(postAux)>0) {
@@ -162,14 +165,23 @@ public class ExibirPostActivity extends Activity implements
 			}else{
 				Toast.makeText(ExibirPostActivity.this, "Este post não possui anexo(s).", Toast.LENGTH_SHORT).show();
 			}
-			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();			
+		}
 			break;
-
+		case R.id.action_fragment_exibir_post_abrir_navegador:{
+			if (U.isConnected(ExibirPostActivity.this)) {
+				Uri uri = Uri.parse(postAux.getLink());
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(intent);				
+			}else{
+				Toast.makeText(ExibirPostActivity.this, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
+			}
+		}
+			break;
 		default:
 			break;
 
 		}
-		//return super.onOptionsItemSelected(item);
 		return true;
 	}
 //

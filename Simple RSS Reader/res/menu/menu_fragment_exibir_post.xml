@@ -8,7 +8,10 @@
         android:actionProviderClass="android.widget.ShareActionProvider"/>
     <item
         android:id="@+id/action_fragment_exibir_post_anexos"
-        android:icon="@android:drawable/ic_menu_preferences"
         android:showAsAction="collapseActionView"
-        android:title="@string/action_fragment_exibir_post_anexos"/>    
+        android:title="@string/action_fragment_exibir_post_anexos"/>
+    <item
+        android:id="@+id/action_fragment_exibir_post_abrir_navegador"
+        android:showAsAction="collapseActionView"
+        android:title="@string/action_fragment_exibir_post_abrir_navegador"/>
 </menu>

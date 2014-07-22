@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ShareActionProvider;
 import android.widget.SpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedSpinnerAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
@@ -29,7 +28,6 @@ public class ListarPostsActivity extends FragmentActivity implements
 	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 	private Feed feedAux = null;
 	private List<Feed> feedsAux = null;
-	private ShareActionProvider mShareActionProvider = null;
 
 	
 	private void carregar(ActionBar actionBar){

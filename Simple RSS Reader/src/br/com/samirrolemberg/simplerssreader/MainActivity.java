@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -134,10 +133,13 @@ public class MainActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_contexto_feeds_abrir_no_navegador:{
-			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			Uri uri = Uri.parse(feedAux.getLink());
-			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(intent);			
+			if (U.isConnected(MainActivity.this)) {
+				Uri uri = Uri.parse(feedAux.getLink());
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(intent);							
+			}else{
+				Toast.makeText(MainActivity.this, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
+			}
 		}
 			break;
 		case R.id.menu_contexto_feeds_atualizar_feed:{
