@@ -46,7 +46,7 @@ public class ListaFeedSpinnerAdapter extends BaseAdapter {
 		nome.setText(f.getTitulo());
 		TextView rss = (TextView) view.findViewById(R.id.url_feed__exibir_feeds_spinner);		
 		rss.setText(f.getRss());			
-
+		
 		return view;
 	}
 }

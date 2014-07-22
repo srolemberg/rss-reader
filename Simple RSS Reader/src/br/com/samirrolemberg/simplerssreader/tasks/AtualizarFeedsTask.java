@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
@@ -102,7 +103,7 @@ public class AtualizarFeedsTask extends AsyncTask<String, Integer, List<Feed>> {
 		.setContentTitle("Atualizando Feeds")
 		.setPriority(NotificationCompat.PRIORITY_DEFAULT)
 		.setOngoing(true)
-		.setSmallIcon(android.R.drawable.arrow_down_float);
+		.setSmallIcon(R.drawable.ic_action_rss_icon_bola_transparente);
 	}
 	@Override
 	protected List<Feed> doInBackground(String... arg) {

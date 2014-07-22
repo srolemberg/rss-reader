@@ -161,8 +161,6 @@ public class ListarPostsFragment extends Fragment{
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 			View detalhe = (new DetalhesPostDialog(getActivity(), inflater.inflate(R.layout.dialog_detalhes_post, null), postAux)).create();
 			new AlertDialog.Builder(getActivity())
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle("Detalhes do Post")
 			.setView(detalhe)
 			.setPositiveButton("Fechar", null)
 			.show();

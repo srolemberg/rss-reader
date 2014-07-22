@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-        <LinearLayout
+<LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-	            <LinearLayout
+    		<include layout="@layout/dialog_titulo_customizado" android:id="@+id/dialog_titulo_customizado"/>
+    		<ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            	<LinearLayout 
+		           android:layout_width="match_parent"
+		           android:layout_height="wrap_content"
+            android:orientation="vertical" >		           
+            	    >
+            	    <LinearLayout
 	                android:id="@+id/titulo__linear_detalhes_dialog_feed"
 	                android:layout_width="wrap_content"
 	                android:layout_height="match_parent"
@@ -293,5 +299,6 @@
 	                    android:layout_height="wrap_content"
 	                    android:text="TextView" />
 	            </LinearLayout>
-	            </LinearLayout>
-</ScrollView>
+            	</LinearLayout>
+    		</ScrollView>
+</LinearLayout>

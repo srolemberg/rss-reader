@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
+import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
@@ -33,7 +34,7 @@ public class ExcluirPostTask extends AsyncTask<String, Integer, Feed> {
 		mBuilder = new NotificationCompat.Builder(context)
 		.setContentTitle("Removendo "+post.getTitulo())
 		.setContentText("Removendo registros do post.")
-		.setSmallIcon(android.R.drawable.arrow_down_float);
+		.setSmallIcon(R.drawable.ic_action_rss_icon_bola_transparente);
 	}
 	@Override
 	protected Feed doInBackground(String... params) {

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
@@ -55,7 +56,7 @@ public class LimparConteudoFeedTask extends AsyncTask<String, Integer, Feed> {
 		.setContentTitle("Limpando "+feed.getTitulo())
 		.setContentText("Limpando o conteúdo do feed.")
 		.setOngoing(true)
-		.setSmallIcon(android.R.drawable.arrow_down_float);
+		.setSmallIcon(R.drawable.ic_action_rss_icon_bola_transparente);
 		Executando.ADICIONAR_FEED.put(feed.getIdFeed()+feed.getRss(), 1);
 	}
 	@Override

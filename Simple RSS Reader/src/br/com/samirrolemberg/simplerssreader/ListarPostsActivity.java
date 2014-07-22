@@ -80,7 +80,7 @@ public class ListarPostsActivity extends FragmentActivity implements
 
 		//TODO:BUGSENSE - REMOVER DEPOIS?
 	    BugSenseHandler.initAndStartSession(this, getString(R.string.bugsense__api_key));
-		setContentView(R.layout.activity_exibir_post);
+		//setContentView(R.layout.activity_exibir_post);
 
 		setContentView(R.layout.activity_listar_posts);
 

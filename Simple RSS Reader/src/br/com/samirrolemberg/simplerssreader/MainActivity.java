@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -145,6 +146,7 @@ public class MainActivity extends Activity {
 					Intent intent = new Intent(MainActivity.this, AtualizarFeedService.class);
 					intent.putExtra("Feed", feedAux);
 					startService(intent);
+					carregar();//pode dar problema
 				}else{
 					Toast.makeText(MainActivity.this, "Já existe uma atualização em andamento. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 				}					
@@ -158,11 +160,9 @@ public class MainActivity extends Activity {
 			LayoutInflater inflater = this.getLayoutInflater();
 			View detalhe = (new DetalhesFeedDialog(MainActivity.this, inflater.inflate(R.layout.dialog_detalhes_feed, null), feedAux)).create();
 			new AlertDialog.Builder(MainActivity.this)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle("Detalhes do Feed")
 			.setView(detalhe)
 			.setPositiveButton("Fechar", null)
-			.show();			
+			.show();
 		}
 			break;
 		case R.id.menu_contexto_feeds_limpar_conteudo:{
@@ -178,6 +178,7 @@ public class MainActivity extends Activity {
 						Intent intent = new Intent(MainActivity.this, LimparConteudoService.class);
 						intent.putExtra("Feed", feedAux);
 						startService(intent);
+						carregar();//pode dar problema
 					}else{
 						Toast.makeText(MainActivity.this, "Este feed está atualizando. Aguarde alguns instantes.", Toast.LENGTH_SHORT).show();
 					}

@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOAnexo;
 import br.com.samirrolemberg.simplerssreader.dao.DAOCategoria;
@@ -86,7 +87,7 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 		.setContentTitle("Atualizando "+feed.getTitulo())
 		.setContentText("Sincronizando o Feed.")
 		.setOngoing(true)
-		.setSmallIcon(android.R.drawable.arrow_down_float);
+		.setSmallIcon(R.drawable.ic_action_rss_icon_bola_transparente);
 		//estimativa = estimativaDosFor()*2;
 		Executando.ATUALIZA_FEED.put(feed.getIdFeed()+feed.getRss(), 1);
 	}
@@ -136,6 +137,50 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 		return null;
 	}
 
+	@Override
+	protected void onPostExecute(final Feed result) {
+		super.onPostExecute(result);
+		if (result!=null) {
+			daoFeed = new DAOFeed(context);
+			daoAnexo = new DAOAnexo(context);
+			daoCategoria = new DAOCategoria(context);
+			daoConteudo = new DAOConteudo(context);
+			daoDescricao = new DAODescricao(context);
+			daoImagem = new DAOImagem(context);
+			daoPost = new DAOPost(context);
+			
+			estimativa = estimativaDosFor(result);
+			
+			//verifica se o build do feed é igual ou recente
+			if (result.getData_publicacao()==null) {
+				//quando a data de publicação vier nula, um teste e feito para tornar o feed sempre atualizavel.
+				doIT(result);
+			}else if (feed.getData_publicacao()==null || feed.getData_publicacao().before(result.getData_publicacao())) {
+				doIT(result);
+			}else{
+				//não é necessário atualizar
+				Toast.makeText(getContext(), "Não é necessário atualizar.", Toast.LENGTH_SHORT).show();
+			}
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+			DatabaseManager.getInstance().closeDatabase();
+		}else{
+			Toast.makeText(getContext(), "Não encontrado: "+e.getThrowable().getMessage(), Toast.LENGTH_SHORT).show();
+		}
+        mBuilder.setProgress(0, 0, false);
+        mBuilder.setOngoing(false);
+        mBuilder.setContentText("Feed Atualizado.");
+        mNotifyManager.notify(id, mBuilder.build());
+		if (service!=null) {
+			Log.i("MY-SERVICES", "AtualizarFeedsTask - TRY STOP");
+			this.cancel(false);
+			service.stopService(intent);
+		}
+	}
 	private void doIT(Feed result){
 		//quando a data de publicação vier nula, um teste e feito para tornar o feed sempre atualizavel.
 		//TODO: VERIFICAR COMO REMOVER ALGUNS DADOS QUE DEIXARAM DE VIR (COMO CATEGORIAS)
@@ -302,50 +347,6 @@ public class AtualizarFeedTask extends AsyncTask<String, Integer, Feed> {
 			}
 		}
 		Toast.makeText(getContext(), feed.getTitulo()+" foi atualizado com sucesso.", Toast.LENGTH_SHORT).show();
-	}
-	@Override
-	protected void onPostExecute(final Feed result) {
-		super.onPostExecute(result);
-		if (result!=null) {
-			daoFeed = new DAOFeed(context);
-			daoAnexo = new DAOAnexo(context);
-			daoCategoria = new DAOCategoria(context);
-			daoConteudo = new DAOConteudo(context);
-			daoDescricao = new DAODescricao(context);
-			daoImagem = new DAOImagem(context);
-			daoPost = new DAOPost(context);
-			
-			estimativa = estimativaDosFor(result);
-			
-			//verifica se o build do feed é igual ou recente
-			if (result.getData_publicacao()==null) {
-				//quando a data de publicação vier nula, um teste e feito para tornar o feed sempre atualizavel.
-				doIT(result);
-			}else if (feed.getData_publicacao()==null || feed.getData_publicacao().before(result.getData_publicacao())) {
-				doIT(result);
-			}else{
-				//não é necessário atualizar
-				Toast.makeText(getContext(), "Não é necessário atualizar.", Toast.LENGTH_SHORT).show();
-			}
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-			DatabaseManager.getInstance().closeDatabase();
-		}else{
-			Toast.makeText(getContext(), "Não encontrado: "+e.getThrowable().getMessage(), Toast.LENGTH_SHORT).show();
-		}
-        mBuilder.setProgress(0, 0, false);
-        mBuilder.setOngoing(false);
-        mBuilder.setContentText("Feed Atualizado.");
-        mNotifyManager.notify(id, mBuilder.build());
-		if (service!=null) {
-			Log.i("MY-SERVICES", "AtualizarFeedsTask - TRY STOP");
-			this.cancel(false);
-			service.stopService(intent);
-		}
 	}
 	protected Context getContext(){
 		return this.context;

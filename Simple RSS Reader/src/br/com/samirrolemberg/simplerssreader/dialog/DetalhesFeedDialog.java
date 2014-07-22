@@ -29,6 +29,9 @@ public class DetalhesFeedDialog {
 	}
 	
 	public View create(){
+		TextView tituloDialogo = (TextView) ((view.findViewById(R.id.dialog_titulo_customizado)).findViewById(R.id.texto_titulo_dialogo_customizado));
+		tituloDialogo.setText("Detalhes do Feed");
+		
 		TextView autor = (TextView) view.findViewById(R.id.autor__text_detalhes_dialog_feed);
 		LinearLayout autorLinear = (LinearLayout) view .findViewById(R.id.autor__linear_detalhes_dialog_feed);
 		
