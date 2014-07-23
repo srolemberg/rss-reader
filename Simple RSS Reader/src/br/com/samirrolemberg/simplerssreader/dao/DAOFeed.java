@@ -111,7 +111,7 @@ public class DAOFeed extends DAO{
 		List<Feed> feeds = new ArrayList<Feed>();
 		try {
 			StringBuffer sql = new StringBuffer();
-			sql.append("select * from "+TABLE);
+			sql.append("select * from "+TABLE+" order by idFeed desc ");
 			Cursor cursor = database.rawQuery(sql.toString(), null);
 			while (cursor.moveToNext()) {
 				

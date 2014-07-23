@@ -51,7 +51,7 @@ public class DAOPost extends DAO{
 		try {
 			String[] args = {feed.getIdFeed()+""};
 			StringBuffer sql = new StringBuffer();
-			sql.append("select * from "+TABLE+" where idFeed = ?");
+			sql.append("select * from "+TABLE+" where idFeed = ? order by data_publicacao desc");
 			Cursor cursor = database.rawQuery(sql.toString(), args);
 			while (cursor.moveToNext()) {
 				Post post = new Post.Builder()
