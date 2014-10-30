@@ -25,6 +25,7 @@ import br.com.samirrolemberg.simplerssreader.adapter.ListaFeedAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesFeedDialog;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPerguntaDialogFeed;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesSobreDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.services.AtualizarFeedService;
@@ -169,10 +170,11 @@ public class MainActivity extends Activity {
 			break;
 		case R.id.menu_contexto_feeds_limpar_conteudo:{
 			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			LayoutInflater inflater = this.getLayoutInflater();
+			String frase = "Você removerá todo o conteúdo adicionado para este Feed anteriormente. Deseja continuar?";
+			View limpar = (new DetalhesPerguntaDialogFeed(MainActivity.this, inflater.inflate(R.layout.dialog_pergunta_feed, null), feedAux, frase)).create();
 			new AlertDialog.Builder(MainActivity.this)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(feedAux.getTitulo())
-			.setMessage("Você removerá todo o conteúdo adicionado para este Feed anteriormente. Deseja continuar?")
+			.setView(limpar)
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -204,11 +206,12 @@ public class MainActivity extends Activity {
 		}
 			break;
 		case R.id.menu_contexto_feeds_excluir:{
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+			LayoutInflater inflater = this.getLayoutInflater();
+			String frase = "Deseja remover o FEED selecionado?";
+			View excluir = (new DetalhesPerguntaDialogFeed(MainActivity.this, inflater.inflate(R.layout.dialog_pergunta_feed, null), feedAux, frase)).create();
 			new AlertDialog.Builder(MainActivity.this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(feedAux.getTitulo())
-			.setMessage("Deseja remover o FEED selecionado?")
+			.setView(excluir)
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -255,7 +258,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_adicionar_feed:{			
+		case R.id.action_adicionar_feed:{
 			Intent intent = new Intent(MainActivity.this, AdicionarFeedActivity.class);
 			startActivity(intent);
 		}

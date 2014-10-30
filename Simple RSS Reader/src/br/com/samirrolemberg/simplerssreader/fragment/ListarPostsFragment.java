@@ -21,12 +21,15 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.samirrolemberg.simplerssreader.ExibirPostActivity;
+import br.com.samirrolemberg.simplerssreader.MainActivity;
 import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.adapter.ListarPostsFragmentAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
 import br.com.samirrolemberg.simplerssreader.dao.DAOConteudo;
 import br.com.samirrolemberg.simplerssreader.dao.DAODescricao;
 import br.com.samirrolemberg.simplerssreader.dao.DAOPost;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPerguntaDialogFeed;
+import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPerguntaDialogPost;
 import br.com.samirrolemberg.simplerssreader.dialog.DetalhesPostDialog;
 import br.com.samirrolemberg.simplerssreader.model.Feed;
 import br.com.samirrolemberg.simplerssreader.model.Post;
@@ -150,37 +153,36 @@ public class ListarPostsFragment extends Fragment{
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_contexto_lista_abrir_no_navegador:
-			//Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.menu_contexto_lista_abrir_no_navegador:{
 			if (U.isConnected(getActivity())) {
 				Uri uri = Uri.parse(postAux.getLink());
 				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(intent);				
 			}else{
 				Toast.makeText(getActivity(), "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
-			}
+			}			
+		}
 			break;
-		case R.id.menu_contexto_lista_detalhes:
-			//Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.menu_contexto_lista_detalhes:{
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 			View detalhe = (new DetalhesPostDialog(getActivity(), inflater.inflate(R.layout.dialog_detalhes_post, null), postAux)).create();
 			new AlertDialog.Builder(getActivity())
 			.setView(detalhe)
 			.setPositiveButton("Fechar", null)
-			.show();
+			.show();			
+		}
 			break;
-		case R.id.menu_contexto_lista_excluir:
-			Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+		case R.id.menu_contexto_lista_excluir:{
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			String frase = "Deseja remover o POST selecionado?";
+			View excluir = (new DetalhesPerguntaDialogPost(getActivity(), inflater.inflate(R.layout.dialog_pergunta_feed, null), postAux, frase)).create();
 			new AlertDialog.Builder(getActivity())
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle("Remover")
-			.setMessage("Deseja remover o POST selecionado?")
+			.setView(excluir)
 			.setPositiveButton("Sim", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					if (!Executando.ATUALIZA_FEED.containsKey(feedAux.getIdFeed()+feedAux.getRss())) {
-						
 						//remove o feed do banco apenas
 						DAOPost daoPost = new DAOPost(getActivity());
 						daoPost.remover(postAux);
@@ -190,9 +192,6 @@ public class ListarPostsFragment extends Fragment{
 						ExcluirPostTask task = new ExcluirPostTask(getActivity(), postAux);
 						String[] params = {""};
 						task.execute(params);
-
-						
-						
 //						Toast.makeText(getActivity(), "YES!!", Toast.LENGTH_SHORT).show();					
 //						//TODO: ATUALIZAR LISTA DE REMOÇÃO CONFORME OS DADOS DE UM POST
 //						DAOPost daoPost = new DAOPost(getActivity());
@@ -211,18 +210,20 @@ public class ListarPostsFragment extends Fragment{
 			})
 			.setNegativeButton("Não", null)
 			.show();
+		}
 			break;
-		case R.id.menu_contexto_lista_compartilhar:
+		case R.id.menu_contexto_lista_compartilhar:{
 			if (U.isConnected(getActivity())) {
 				Toast.makeText(getActivity(), item.getTitle().toString(), Toast.LENGTH_SHORT).show();
 				startActivity(doSharePost());				
 			}else{
 				Toast.makeText(getActivity(), "Não há conexão de internet.", Toast.LENGTH_SHORT).show();
-			}
+			}			
+		}
 			break;
-			
-		default:
-			Toast.makeText(getActivity(), "Dismiss", Toast.LENGTH_SHORT).show();
+		default:{
+			Toast.makeText(getActivity(), "Dismiss", Toast.LENGTH_SHORT).show();			
+		}
 			break;
 		}
 		return super.onContextItemSelected(item);

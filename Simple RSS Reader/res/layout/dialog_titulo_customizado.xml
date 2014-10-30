@@ -5,7 +5,7 @@
     android:orientation="vertical" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/ab_background_textured_rss_action_bar_style" >
         <LinearLayout
             android:layout_width="wrap_content"
@@ -14,7 +14,7 @@
                 <ImageView
 			        android:id="@+id/imagem_titulo_dialogo_customizado"
 			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
+			        android:layout_height="match_parent"
 			        android:layout_marginLeft="5dp"
 			        android:layout_marginTop="5dp"
 			        android:layout_marginRight="5dp"

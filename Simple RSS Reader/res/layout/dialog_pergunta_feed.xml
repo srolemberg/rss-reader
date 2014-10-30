@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <include layout="@layout/dialog_titulo_customizado" android:id="@+id/dialog_titulo_customizado"/>
+
+    <TextView
+        android:id="@+id/dialog_pergunta_feed__frase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Frase Pergunta Feed Dialog"
+        android:textSize="18dp"/>
+    
+</LinearLayout>
