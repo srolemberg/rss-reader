@@ -38,7 +38,7 @@
 			       android:layout_marginRight="5dp"
 			       android:layout_marginBottom="5dp"
 			       android:textStyle="bold"
-			       android:text="TITULO DO " />
+			       android:text="TITULO CUSTOMIZADO DO ALERT" />
         </LinearLayout>
     </LinearLayout>
         <LinearLayout 

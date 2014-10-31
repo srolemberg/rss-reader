@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import br.com.samirrolemberg.simplerssreader.R;
 import br.com.samirrolemberg.simplerssreader.adapter.ListaAnexosPostAdapter;
 import br.com.samirrolemberg.simplerssreader.conn.DatabaseManager;
@@ -35,6 +36,8 @@ public class DetalhesAnexosPostDialog {
 		DatabaseManager.getInstance().closeDatabase();
 		ListView list = (ListView) view.findViewById(R.id.lista_dialogo_anexos_post);
 		list.setAdapter(adapter);
+		TextView titulo = (TextView) view.findViewById(R.id.texto_titulo_dialogo_customizado);
+		titulo.setText("Anexos");
 		
 		return view;
 	}

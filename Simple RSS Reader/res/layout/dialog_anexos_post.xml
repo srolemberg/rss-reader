@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
+	<include layout="@layout/dialog_titulo_customizado" android:id="@+id/dialog_titulo_customizado"/>
     <ListView 
         android:id="@+id/lista_dialogo_anexos_post"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
     />
 </LinearLayout>
