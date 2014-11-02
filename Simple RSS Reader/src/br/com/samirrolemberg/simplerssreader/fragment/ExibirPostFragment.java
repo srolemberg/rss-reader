@@ -15,6 +15,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +43,6 @@ public class ExibirPostFragment extends Fragment {
 	 */
 	private static final String ARG_POST_CONTENT= "post_content";
 
-	//private Feed feedAux = null;
 	private Post postAux = null;
 
 	private List<Conteudo> conteudosFrag = null;
@@ -50,6 +50,11 @@ public class ExibirPostFragment extends Fragment {
 	
 	private DAOConteudo daoConteudo = null;
 	private DAODescricao daoDescricao = null;
+
+	private WebView navegador = null;
+
+	public final static String _button = "_BUTTON";
+	public final static String _img = "_IMG";
 	
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -92,14 +97,22 @@ public class ExibirPostFragment extends Fragment {
 		}
 		@JavascriptInterface
 		public void toast(String toast){
-			Toast.makeText(activity, toast, Toast.LENGTH_LONG).show();
+			Toast.makeText(activity, toast, Toast.LENGTH_SHORT).show();
 		}
 		
 		@SuppressLint("InflateParams")
 		@JavascriptInterface
-		public void abrir(String url){
+		public void abrir(String url, final String tipo){
+			String frase = "";
+			if (tipo.equals(_button)) {
+				frase = "Como deseja abrir o vídeo?";
+			}else
+			if (tipo.equals(_img)){
+				frase = "Como deseja abrir a imagem?";
+			}
+			
 			LayoutInflater inflater = activity.getLayoutInflater();
-			View pergunta = (new DetalhesPerguntaDialogPost(activity,  inflater.inflate(R.layout.dialog_pergunta_feed, null), postAux,"Como deseja abrir o vídeo?")).create();
+			View pergunta = (new DetalhesPerguntaDialogPost(activity,  inflater.inflate(R.layout.dialog_pergunta_feed, null), postAux,frase)).create();
 			final Uri uri = Uri.parse(url);
 			final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 			new AlertDialog.Builder(activity)
@@ -113,7 +126,12 @@ public class ExibirPostFragment extends Fragment {
 			.setNegativeButton("Aplicativo", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					intent.setDataAndType(uri, "video/mp4");
+					if (tipo.equals(_button)) {
+						intent.setDataAndType(uri, "video/*");						
+					}else
+					if (tipo.equals(_img)) {
+						intent.setDataAndType(uri, "image/*");						
+					}
 					open(intent);
 				}
 			})
@@ -124,24 +142,29 @@ public class ExibirPostFragment extends Fragment {
 			if (U.isConnected(activity)) {
 				startActivity(intent);				
 			}else{
-				Toast.makeText(activity, "Não há conexão de internet.", Toast.LENGTH_SHORT).show();					
+				toast("Não há conexão de internet.");
 			}
 		}
 		
 	}
 	@SuppressLint("SetJavaScriptEnabled")
+	private void config(final WebView view){
+		view.getSettings().setBlockNetworkLoads(true);
+		view.getSettings().setJavaScriptEnabled(true);
+		view.getSettings().setLoadWithOverviewMode(true);
+		view.getSettings().setUseWideViewPort(true);
+		view.setWebChromeClient(new WebChromeClient());
+		view.addJavascriptInterface(new JSInterface(getActivity()), "Android");
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_exibir_post, container, false);
-		WebView navegador = (WebView) rootView.findViewById(R.id.navegador__exibir_post_fragment);
+		navegador = (WebView) rootView.findViewById(R.id.navegador__exibir_post_fragment);
 		
 		daoConteudo = new DAOConteudo(getActivity());
 		daoDescricao = new DAODescricao(getActivity());
 		
-		navegador.getSettings().setBlockNetworkLoads(true);
-		navegador.getSettings().setJavaScriptEnabled(true);
-		navegador.setWebChromeClient(new WebChromeClient());
-		navegador.addJavascriptInterface(new JSInterface(getActivity()), "Android");
+		config(navegador);
 		
 		if (daoConteudo.size(postAux)>0) {//se o conteudo total não é nulo
 			String data = conteudosFrag.get(0).getValor();
@@ -171,28 +194,76 @@ public class ExibirPostFragment extends Fragment {
 	}
 	
 	private String returnData(String data){
+		int vertical = Configuration.ORIENTATION_PORTRAIT;
+		int orientacao = getResources().getConfiguration().orientation;
+		
 		Document doc = Jsoup.parse(data);
 		
-		Element elem = doc.head();
-		String script = "<script type=\"text/javascript\">"+
-		"function toast(toast) {"+
-		"    Android.abrir(toast);"+
+		
+		Elements eDiv = doc.select("div");
+		eDiv.removeAttr("style");
+
+		for (Element div : eDiv) {//tratamento para alguma plugin de site que trabalha com feedburner
+			if (div.className().equalsIgnoreCase("feedflare")) {
+				div.remove();
+			}
+		}
+		
+		Elements eImg = doc.select("img");
+		eImg.wrap("<p>");//corrige a quebra de linha de alguns feeds
+		eImg.wrap("<center>");//centraliza a imagem
+		eImg.removeAttr("width");//remove altura e largura e alinhamento e deixa o css tratar 
+		eImg.removeAttr("height");
+		eImg.removeAttr("align");//cada img possui um center e um p
+
+		for (Element img : eImg) {
+			String src = img.getElementsByTag("img").attr("src");
+			img.attr("onClick", "abrir('"+src+"','"+_img+"')");//seta onclick para todos os imgs
+			//TODO: REVER AS TAGS LINKS QUE FAZEM DUPLO CLICK EM IMAGENS
+		}
+		
+		Element eHead = doc.head();
+		String script1 = "<script type=\"text/javascript\">"+
+		"function abrir(toast, type) {"+
+		"    Android.abrir(toast, type);"+
 		"}"+
 		"</script>";
-		elem.append(script);
-		
-		Elements elements = doc.select("iframe");
-		elements.tagName("button");
-		int i = 1;
-		for (Element element : elements) {
-			String src = element.getElementsByTag("button").attr("src");
+		String style = "<style type=\"text/css\">"+
+		"button{"
+				+" display:inline;"
+				+" height:auto;"
+				//+" max-width:100%;"
+				+((orientacao==vertical)?" max-width:100%;":" max-width:55%;")
+				//+" font-size:40px;"
+				+((orientacao==vertical)?" font-size:50px;":" font-size:30px;")
+		+ "}"
+		+"img{"
+			+" display:inline;"
+			+" height:auto;"
+			//+" max-width:100%;"
+			+((orientacao==vertical)?" max-width:100%;":" max-width:55%;")
+			+" align:middle;"
+		+ "}"
+		+"body{"
+		//+" font-size:40px;"
+		+((orientacao==vertical)?" font-size:50px;":" font-size:30px;")
+		+ "}"
+		+"</style>";
+		eHead.append(script1);
+		eHead.append(style);
 
-			for (Attribute attr : element.attributes().asList()) {
-				element.removeAttr(attr.getKey());
+		
+		Elements eIframe = doc.select("iframe");
+		eIframe.tagName("button");
+		eIframe.wrap("<center>");
+		int i = 0;
+		for (Element button : eIframe ) {
+			String src = button.getElementsByTag("button").attr("src");
+			for (Attribute attr : button.attributes().asList()) {
+				button.removeAttr(attr.getKey());
 			}
-			element.attr("onClick", "toast('"+src+"')");
-			element.text("Assistir ao Video "+i);
-			i++;
+			button.attr("onClick", "abrir('"+src+"', '"+_button+"')");
+			button.text("Abrir conteúdo multi-mídia "+(++i));
 		}
 		
 		return data = doc.html();
