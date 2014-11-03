@@ -149,7 +149,7 @@ public class ExibirPostFragment extends Fragment {
 	}
 	@SuppressLint("SetJavaScriptEnabled")
 	private void config(final WebView view){
-		view.getSettings().setBlockNetworkLoads(true);
+		view.getSettings().setBlockNetworkLoads(false);
 		view.getSettings().setJavaScriptEnabled(true);
 		view.getSettings().setLoadWithOverviewMode(true);
 		view.getSettings().setUseWideViewPort(true);
@@ -193,13 +193,27 @@ public class ExibirPostFragment extends Fragment {
 		return rootView;
 	}
 	
+	static String CLASS_LINKHITOF = "LINKHITOFF";
+	
 	private String returnData(String data){
 		int vertical = Configuration.ORIENTATION_PORTRAIT;
 		int orientacao = getResources().getConfiguration().orientation;
 		
 		Document doc = Jsoup.parse(data);
 		
+		Elements eA = doc.select("a");
 		
+		for (Element a : eA) {
+			if (!a.getElementsByTag("img").isEmpty()) {//se algum link tem imagem
+				Elements eImg = a.getElementsByTag("img");//pega todas as imgs
+				for (Element img : eImg) {//para cada img de cada a
+					if (img.hasAttr("src")) {
+						//a.attr("class",CLASS_LINKHITOF);
+						a.removeAttr("href");
+					}
+				}
+			}
+		}
 		Elements eDiv = doc.select("div");
 		eDiv.removeAttr("style");
 
@@ -221,15 +235,19 @@ public class ExibirPostFragment extends Fragment {
 			img.attr("onClick", "abrir('"+src+"','"+_img+"')");//seta onclick para todos os imgs
 			//TODO: REVER AS TAGS LINKS QUE FAZEM DUPLO CLICK EM IMAGENS
 		}
-		
+
 		Element eHead = doc.head();
 		String script1 = "<script type=\"text/javascript\">"+
 		"function abrir(toast, type) {"+
 		"    Android.abrir(toast, type);"+
 		"}"+
 		"</script>";
-		String style = "<style type=\"text/css\">"+
-		"button{"
+		String style = "<style type=\"text/css\">"
+//		+"a."+CLASS_LINKHITOF+"{"
+//				+" pointer-events: none;"
+//				+" cursor: default;"
+//		+ "}"
+		+"button{"
 				+" display:inline;"
 				+" height:auto;"
 				//+" max-width:100%;"
