@@ -4,4 +4,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!-- Espaçamento Padrão para o Leitor. -->
+    <dimen name="espacamento_padrao_web_view">8dp</dimen>
+    <!-- Espaçamento Padrão para o Item das Listas. -->
+    <dimen name="espacamento_padrao_item_listas">8dp</dimen>
+    
+
 </resources>

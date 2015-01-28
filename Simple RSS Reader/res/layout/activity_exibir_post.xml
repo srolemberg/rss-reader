@@ -3,6 +3,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:padding="@dimen/activity_vertical_margin" 
     tools:context="br.com.samirrolemberg.simplerssreader.ExibirPostActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame"
+    android:background="@android:color/white"/>
 

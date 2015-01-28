@@ -280,9 +280,7 @@ public class MainActivity extends Activity {
 		}
 			break;
 		case R.id.action_ajuda:{
-			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(MainActivity.this, AjudaActivity.class);
-			startActivity(intent);			
+			Toast.makeText(MainActivity.this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();				
 		}
 			break;
 		case R.id.action_sobre:{

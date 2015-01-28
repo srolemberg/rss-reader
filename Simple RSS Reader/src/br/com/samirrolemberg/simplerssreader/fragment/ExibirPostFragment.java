@@ -193,7 +193,6 @@ public class ExibirPostFragment extends Fragment {
 		return rootView;
 	}
 	
-	static String CLASS_LINKHITOF = "LINKHITOFF";
 	
 	private String returnData(String data){
 		int vertical = Configuration.ORIENTATION_PORTRAIT;
@@ -243,10 +242,7 @@ public class ExibirPostFragment extends Fragment {
 		"}"+
 		"</script>";
 		String style = "<style type=\"text/css\">"
-//		+"a."+CLASS_LINKHITOF+"{"
-//				+" pointer-events: none;"
-//				+" cursor: default;"
-//		+ "}"
+
 		+"button{"
 				+" display:inline;"
 				+" height:auto;"
@@ -265,6 +261,8 @@ public class ExibirPostFragment extends Fragment {
 		+"body{"
 		//+" font-size:40px;"
 		+((orientacao==vertical)?" font-size:50px;":" font-size:30px;")
+		+"text-align: justify;"
+		+"text-justify: inter-word;"
 		+ "}"
 		+"</style>";
 		eHead.append(script1);
